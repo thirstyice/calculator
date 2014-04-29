@@ -1,6 +1,5 @@
 
 
-
 public class mainCalculator {
 static double memory[] = new double[10];
 static double equation[] = new double[100];
@@ -217,9 +216,7 @@ static void clickSqrt() {
 	}
 }
 static void changeSign() {
-	if (mainWindow.inputText.getText().isEmpty()==true && mainWindow.currentEquation.getText().isEmpty()==true && finalResult!=0) {
-		mainWindow.inputText.setText("-" + String.valueOf(finalResult));
-	} else if (mainWindow.inputText.getText().isEmpty()==true) {
+	if (mainWindow.inputText.getText().isEmpty()==true) {
 		mainWindow.inputText.setText("-");
 	} else {
 		mainWindow.inputText.setText(String.valueOf(Double.parseDouble(mainWindow.inputText.getText())*-1));
