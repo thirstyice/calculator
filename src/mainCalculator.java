@@ -313,7 +313,7 @@ static void convertFromDecimal() {
 	}
 }
 static void convertToDecimal() {
-	String converterInput = mainWindow.convOutput.getText();
+	String converterInput = mainWindow.convOutput.getText().toUpperCase();
 	int base = (Integer)mainWindow.convBaseSelect.getValue();
 	int inputLength = converterInput.length();
 	char[] inputNumber = new char[inputLength];
