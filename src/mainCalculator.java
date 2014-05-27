@@ -1,6 +1,19 @@
-
-
-
+/*	Cross-platform calculator
+*	Copyright (C) 2014  Tauran wood
+*
+*	This program is free software: you can redistribute it and/or modify
+*	it under the terms of the GNU General Public License as published by
+*	the Free Software Foundation, either version 3 of the License, or
+*	(at your option) any later version.
+*
+*	This program is distributed in the hope that it will be useful,
+*	but WITHOUT ANY WARRANTY; without even the implied warranty of
+*	MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+*	GNU General Public License for more details.
+*
+*	You should have received a copy of the GNU General Public License
+*	along with this program.  If not, see <http://www.gnu.org/licenses/>.
+*/
 public class mainCalculator {
 static double memory[] = new double[10];
 static double equation[] = new double[100];
@@ -217,9 +230,7 @@ static void clickSqrt() {
 	}
 }
 static void changeSign() {
-	if (mainWindow.inputText.getText().isEmpty()==true && mainWindow.currentEquation.getText().isEmpty()==true && finalResult!=0) {
-		mainWindow.inputText.setText("-" + String.valueOf(finalResult));
-	} else if (mainWindow.inputText.getText().isEmpty()==true) {
+	if (mainWindow.inputText.getText().isEmpty()==true) {
 		mainWindow.inputText.setText("-");
 	} else {
 		mainWindow.inputText.setText(String.valueOf(Double.parseDouble(mainWindow.inputText.getText())*-1));
