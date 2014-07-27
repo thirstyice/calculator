@@ -1,3 +1,5 @@
+import javax.swing.JOptionPane;
+
 /*	Cross-platform calculator
 *	Copyright (C) 2014  Tauran wood
 *
@@ -73,8 +75,10 @@ static void clickOperator(char op) {
 			return; // If the last character is ')', the equation was set when it was placed
 		}
 	} else if (mainWindow.inputText.getText().matches("-?\\d+(\\.\\d+)?")==true) {
+		// If input is a number
 		equation[eqCount] = Double.parseDouble(mainWindow.inputText.getText());
 	} else {
+		JOptionPane.showMessageDialog(mainWindow.frame, "Input not a number", "Warning", JOptionPane.ERROR_MESSAGE);
 		return;
 	}
 	operator[operCount]=op;
@@ -84,10 +88,11 @@ static void clickOperator(char op) {
 	mainWindow.inputText.setText("");
 }
 static void clickEquals() {
-	if (mainWindow.inputText.getText().isEmpty()==false) {
+	if (mainWindow.inputText.getText().matches("-?\\d+(\\.\\d+)?")==true) {
 		equation[eqCount] = Double.parseDouble(mainWindow.inputText.getText());
 		eqCount++;
 	} else if (mainWindow.currentEquation.getText().endsWith(")")==false) {
+		JOptionPane.showMessageDialog(mainWindow.frame, "Input not a number", "Warning", JOptionPane.ERROR_MESSAGE);
 		return;
 	}
 	mainWindow.currentEquation.setText(mainWindow.currentEquation.getText() + mainWindow.inputText.getText()+ "=");
@@ -100,6 +105,7 @@ static void clickEquals() {
 	operCount=1;
 	openBracketCount = 0;
 	closeBracketCount = 0;
+	updateBracketCount();
 }
 static void calculate() {
 	int openBracketPosition = 1;
@@ -209,9 +215,15 @@ static void clickOpenBracket() {
 	openBracket[openBracketCount] = eqCount;
 	openBracketCount++;
 	mainWindow.currentEquation.setText(mainWindow.currentEquation.getText() + "(");
-	mainWindow.openBracketCount.setText("( = " + String.valueOf(openBracketCount - closeBracketCount));
-}
+	updateBracketCount();
+	}
 static void clickCloseBracket() {
+	if (openBracketCount-closeBracketCount==0) {
+		return;
+	}
+	if (mainWindow.currentEquation.getText().endsWith("(")) {
+		clickNumber('0');
+	}
 	if (mainWindow.inputText.getText().isEmpty()==false) {
 		equation[eqCount] = Double.parseDouble(mainWindow.inputText.getText());
 	}
@@ -219,13 +231,16 @@ static void clickCloseBracket() {
 	mainWindow.inputText.setText("");
 	closeBracket[closeBracketCount] = eqCount;
 	closeBracketCount++;
+	updateBracketCount();
+}
+static void updateBracketCount() {
 	mainWindow.openBracketCount.setText("( = " + String.valueOf(openBracketCount - closeBracketCount));
 }
 static void clickSqrt() {
-	if (mainWindow.inputText.getText()=="" && mainWindow.currentEquation.getText()=="") {
+	if (mainWindow.inputText.getText().isEmpty() && mainWindow.currentEquation.getText()=="") {
 		mainWindow.finalOutput.setText("sqrt(" + String.valueOf(finalResult) + ")=" + String.valueOf(Math.sqrt(finalResult)));
 		finalResult = Math.sqrt(finalResult);
-	} else if (mainWindow.inputText.getText()!="") {
+	} else if (mainWindow.inputText.getText().isEmpty()==false) {
 		mainWindow.inputText.setText(String.valueOf(Math.sqrt(Double.parseDouble(mainWindow.inputText.getText()))));
 	}
 }

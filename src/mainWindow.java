@@ -31,6 +31,8 @@ import java.awt.event.FocusEvent;
 
 
 public class mainWindow extends JFrame {
+	static mainWindow frame = new mainWindow();
+	
 	static JPanel contentPane;
 	static JTextField inputText;
 	static JTextField memContents;
@@ -100,7 +102,7 @@ public class mainWindow extends JFrame {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
-					mainWindow frame = new mainWindow();
+					frame = new mainWindow();
 					frame.setVisible(true);
 				} catch (Exception e) {
 					e.printStackTrace();
@@ -569,6 +571,11 @@ public class mainWindow extends JFrame {
 		contentPane.add(opSignChange);
 		
 		JButton opSqrt = new JButton("\u221A");
+		opSqrt.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				mainCalculator.clickSqrt();
+			}
+		});
 		opSqrt.setMargin(new Insets(2, 5, 2, 5));
 		opSqrt.setBackground(SystemColor.control);
 		opSqrt.setForeground(new Color(0, 0, 0));
@@ -762,6 +769,9 @@ public class mainWindow extends JFrame {
 		/*
 		 * Radio buttons
 		 */
+		
+		angleMode = new ButtonGroup();
+		
 		rdbtnDeg = new JRadioButton("Deg");
 		rdbtnDeg.setForeground(new Color(0, 0, 0));
 		rdbtnDeg.setFont(new Font("Tahoma", Font.PLAIN, 11));
@@ -798,6 +808,8 @@ public class mainWindow extends JFrame {
 		convOutput.setBounds(9, 60, 227, 20);
 		contentPane.add(convOutput);
 		convOutput.setColumns(10);
+		
+		functionSelector = new ButtonGroup();
 		
 		rdbtnConv = new JRadioButton("Conv");
 		rdbtnConv.setFont(new Font("Tahoma", Font.PLAIN, 11));
