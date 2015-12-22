@@ -258,14 +258,6 @@ static void clickCloseBracket() {
 static void updateBracketCount() {
 	MainWindow.openBracketCount.setText("( = " + String.valueOf(openBracketCount - closeBracketCount));
 }
-static void clickSqrt() {
-	if (MainWindow.inputText.getText().isEmpty() && MainWindow.currentEquation.getText()=="") {
-		MainWindow.finalOutput.setText("sqrt(" + String.valueOf(finalResult) + ")=" + String.valueOf(Math.sqrt(finalResult)));
-		finalResult = Math.sqrt(finalResult);
-	} else if (MainWindow.inputText.getText().isEmpty()==false) {
-		MainWindow.inputText.setText(String.valueOf(Math.sqrt(Double.parseDouble(MainWindow.inputText.getText()))));
-	}
-}
 static void changeSign() {
 	if (MainWindow.inputText.getText().isEmpty()==true) {
 		MainWindow.inputText.setText("-");
