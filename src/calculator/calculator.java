@@ -26,8 +26,8 @@ static double equation[] = new double[100];
 static double finalResult;
 static int openBracket[] = new int[100];
 static int closeBracket[] = new int[100];
-static int trig[][] = new int[6][100];
-static int trigCount = 0;
+static int func[][] = new int[6][100];
+static int funcCount = 0;
 static int openBracketCount = 0;
 static int closeBracketCount = 0;
 static int eqCount = 1;
@@ -39,10 +39,10 @@ static void clearDisplay() {
 	if (MainWindow.inputText.getText().isEmpty()==true) {
 		MainWindow.currentEquation.setText("");
 		MainWindow.openBracketCount.setText("( = 0");
-		trig= new int[3][100];
+		func= new int[3][100];
 		eqCount=1;
 		operCount=1;
-		trigCount = 0;
+		funcCount = 0;
 		openBracketCount = 0;
 		closeBracketCount = 0;
 	} else {
@@ -117,17 +117,17 @@ static void calculate() {
 	int openBracketPosition = 1;
 	int closeBracketPosition = 1;
 	// Check to make sure that there is, in fact, something to calculate
-	if (operCount==1 && trigCount==0 && closeBracketCount == 0) {
+	if (operCount==1 && funcCount==0 && closeBracketCount == 0) {
 		finalResult=Double.parseDouble(MainWindow.inputText.getText());
 		return;
-	} else if (operCount==1 && trigCount==0 && closeBracketCount != 0) {
+	} else if (operCount==1 && funcCount==0 && closeBracketCount != 0) {
 		finalResult=equation[1];
 		return;
 	}
 	
 	
 	// Aaaaand, Begin!
-	for (closeBracketPosition = 0; openBracketCount>=0; closeBracketPosition++) {
+	while (openBracketCount>=0) {
 		// Get the position of the last open bracket
 		for (openBracketPosition = 0; openBracketPosition<99; openBracketPosition++){
 			if (openBracket[openBracketPosition]==0) {
@@ -177,16 +177,17 @@ static void calculateForOperator(char op, int lowerBound, int higherBound) {
 	}
 	for (int index=lowerBound; index < higherBound; index++) {
 		if (operator[index]==op) {
-			if (op=='^') {
-				equation[index]=Math.pow(equation[index], equation[index+1]);
-			} else if (op=='/') {
-				equation[index]=equation[index] / equation[index+1];
-			} else if (op=='*') {
-				equation[index]=equation[index] * equation[index+1];
-			} else if (op=='+') {
-				equation[index]=equation[index] + equation[index+1];
-			} else if (op=='-') {
-				equation[index]=equation[index] - equation[index+1];
+			switch (op) {
+				case '^': equation[index]=Math.pow(equation[index], equation[index+1]);
+					break;
+				case '/': equation[index]=equation[index] / equation[index+1];
+					break;
+				case '*': equation[index]=equation[index] * equation[index+1];
+					break;
+				case '+': equation[index]=equation[index] + equation[index+1];
+					break;
+				case '-': equation[index]=equation[index] - equation[index+1];
+					break;
 			}
 			for (int counter = index; counter<eqCount; counter++) {
 				equation[counter+1]=equation[counter+2];
@@ -201,26 +202,27 @@ static void calculateForOperator(char op, int lowerBound, int higherBound) {
 }
 static void calculateTrig(int place) {
 	for (int function=0; function<6; function++) {
-		for (int counter = 0; counter<trigCount;counter++) {
-			if (trig[function][counter]==place) {
-				if (angleType=='d') {
+		for (int counter = 0; counter<funcCount;counter++) {
+			if (func[function][counter]==place) {
+				if (angleType=='d' && function<6) {
 					equation[place]=equation[place]*(Math.PI/180);
 				}
-				if (function==0) {
-					equation[place]=Math.sin(equation[place]);
-				} else if (function==1) {
-					equation[place]=Math.cos(equation[place]);
-				} else if (function==2) {
-					equation[place]=Math.tan(equation[place]);
-				} else if (function==3) {
-					equation[place]=Math.asin(equation[place]);
-				} else if (function==4) {
-					equation[place]=Math.acos(equation[place]);
-				} else if (function==5) {
-					equation[place]=Math.atan(equation[place]);
+				switch (function) {
+					case 0: equation[place]=Math.sin(equation[place]);
+							break;
+					case 1: equation[place]=Math.cos(equation[place]);
+							break;
+					case 2: equation[place]=Math.tan(equation[place]);
+							break;
+					case 3: equation[place]=Math.asin(equation[place]);
+							break;
+					case 4: equation[place]=Math.acos(equation[place]);
+							break;
+					case 5: equation[place]=Math.atan(equation[place]);
+							break;
 				}
 				finalResult = equation[place];
-				trigCount--;
+				funcCount--;
 			}
 		}
 	}
@@ -302,20 +304,21 @@ static void decrementMemoryLocation() {
  * Trig functions
  */
 static void clickTrig(String function) {
-	if (function.equals("sin")) {
-		trig[0][trigCount] = eqCount;
-	} else if (function.equals("cos")) {
-		trig[1][trigCount] = eqCount;
-	} else if (function.equals("tan")) {
-		trig[2][trigCount] = eqCount;
-	} else if (function.equals("asin")) {
-		trig[3][trigCount] = eqCount;
-	} else if (function.equals("acos")) {
-		trig[4][trigCount] = eqCount;
-	} else if (function.equals("atan")) {
-		trig[5][trigCount] = eqCount;
+	switch (function) {
+		case "sin": func[0][funcCount] = eqCount;
+			break;
+		case "cos": func[1][funcCount] = eqCount;
+			break;
+		case "tan": func[2][funcCount] = eqCount;
+			break;
+		case "asin":func[3][funcCount] = eqCount;
+			break;
+		case "acos":func[4][funcCount] = eqCount;
+			break;
+		case "atan":func[5][funcCount] = eqCount;
+			break;
 	}
-	trigCount++;
+	funcCount++;
 	MainWindow.currentEquation.setText(MainWindow.currentEquation.getText() + function);
 	clickOpenBracket();
 }
