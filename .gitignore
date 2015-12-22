@@ -1,4 +1,5 @@
 *.class
+.*
 
 # Eclipse stuff
 .classpath
