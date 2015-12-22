@@ -43,7 +43,6 @@ public class MainWindow extends JFrame {
 	static JPanel contentPane;
 	static JTextField inputText;
 	static JTextField memContents;
-	static JTextField convOutput;
 	static JTextField finalOutput;
 	static JTextField currentEquation;
 	static JTextField openBracketCount;
@@ -91,8 +90,6 @@ public class MainWindow extends JFrame {
 	static JButton convBinToDec;
 	static JButton convHexToDec;
 	
-	static JSpinner convBaseSelect;
-	
 	static JSpinner memLocationSelect;
 	
 	static ButtonGroup angleMode = new ButtonGroup();
@@ -100,8 +97,6 @@ public class MainWindow extends JFrame {
 	JRadioButton rdbtnDeg;
 	
 	static ButtonGroup functionSelector = new ButtonGroup();
-	JRadioButton rdbtnMath;
-	JRadioButton rdbtnConv;
 	/**
 	 * Launch the application.
 	 */
@@ -126,7 +121,7 @@ public class MainWindow extends JFrame {
 		setBackground(SystemColor.control);
 		setResizable(false);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		setBounds(100, 50, 650, 336);
+		setBounds(100, 50, 539, 336);
 		contentPane = new JPanel();
 		contentPane.setBackground(SystemColor.window);
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
@@ -138,22 +133,16 @@ public class MainWindow extends JFrame {
 		finalOutput = new JTextField("0");
 		finalOutput.setFont(new Font("Tahoma", Font.PLAIN, 11));
 		finalOutput.setEditable(false);
-		finalOutput.setBounds(9, 10, 623, 20);
+		finalOutput.setBounds(9, 6, 522, 20);
 		contentPane.add(finalOutput);
 		
 		currentEquation = new JTextField("");
 		currentEquation.setFont(new Font("Tahoma", Font.PLAIN, 11));
 		currentEquation.setEditable(false);
-		currentEquation.setBounds(9, 34, 393, 20);
+		currentEquation.setBounds(9, 34, 308, 20);
 		contentPane.add(currentEquation);
 		
 		inputText = new JTextField();
-		inputText.addFocusListener(new FocusAdapter() {
-			@Override
-			public void focusGained(FocusEvent arg0) {
-				rdbtnMath.setSelected(true);
-			}
-		});
 		inputText.addKeyListener(new KeyAdapter() {
 			public void keyTyped(KeyEvent e) {
 				char c = e.getKeyChar();
@@ -185,13 +174,13 @@ public class MainWindow extends JFrame {
 			}
 		});
 		inputText.setFont(new Font("Tahoma", Font.PLAIN, 11));
-		inputText.setBounds(408, 33, 224, 20);
+		inputText.setBounds(319, 34, 212, 20);
 		contentPane.add(inputText);
 		
 		memContents = new JTextField();
 		memContents.setFont(new Font("Tahoma", Font.PLAIN, 11));
 		memContents.setEditable(false);
-		memContents.setBounds(242, 60, 346, 20);
+		memContents.setBounds(9, 59, 475, 20);
 		contentPane.add(memContents);
 		memContents.setColumns(10);
 		/*
@@ -211,7 +200,7 @@ public class MainWindow extends JFrame {
 		memStore.setBackground(SystemColor.control);
 		memStore.setForeground(new Color(0, 0, 0));
 		memStore.setFont(new Font("Tahoma", Font.PLAIN, 11));
-		memStore.setBounds(516, 95, 59, 38);
+		memStore.setBounds(407, 96, 59, 38);
 		contentPane.add(memStore);
 		
 		memRecall = new JButton("Rec.");
@@ -224,7 +213,7 @@ public class MainWindow extends JFrame {
 		memRecall.setBackground(SystemColor.control);
 		memRecall.setForeground(new Color(0, 0, 0));
 		memRecall.setFont(new Font("Tahoma", Font.PLAIN, 11));
-		memRecall.setBounds(516, 136, 59, 38);
+		memRecall.setBounds(407, 137, 59, 38);
 		contentPane.add(memRecall);
 		
 		JButton memScrollDown = new JButton("v");
@@ -237,7 +226,7 @@ public class MainWindow extends JFrame {
 		memScrollDown.setBackground(SystemColor.control);
 		memScrollDown.setForeground(new Color(0, 0, 0));
 		memScrollDown.setFont(new Font("Tahoma", Font.PLAIN, 11));
-		memScrollDown.setBounds(581, 136, 59, 38);
+		memScrollDown.setBounds(472, 137, 59, 38);
 		contentPane.add(memScrollDown);
 		
 		JButton memScrollUp = new JButton("^");
@@ -250,7 +239,7 @@ public class MainWindow extends JFrame {
 		memScrollUp.setBackground(SystemColor.control);
 		memScrollUp.setForeground(new Color(0, 0, 0));
 		memScrollUp.setFont(new Font("Tahoma", Font.PLAIN, 11));
-		memScrollUp.setBounds(581, 96, 59, 38);
+		memScrollUp.setBounds(472, 97, 59, 38);
 		contentPane.add(memScrollUp);
 		
 		/*
@@ -266,7 +255,7 @@ public class MainWindow extends JFrame {
 		clearButton.setBackground(SystemColor.control);
 		clearButton.setForeground(new Color(0, 0, 0));
 		clearButton.setFont(new Font("Tahoma", Font.PLAIN, 11));
-		clearButton.setBounds(442, 95, 59, 38);
+		clearButton.setBounds(333, 96, 59, 38);
 		contentPane.add(clearButton);
 		
 		/*
@@ -282,7 +271,7 @@ public class MainWindow extends JFrame {
 		numNine.setBackground(SystemColor.control);
 		numNine.setForeground(new Color(0, 0, 0));
 		numNine.setFont(new Font("Tahoma", Font.PLAIN, 11));
-		numNine.setBounds(442, 137, 59, 38);
+		numNine.setBounds(333, 138, 59, 38);
 		contentPane.add(numNine);
 		
 		JButton numEight = new JButton("8");
@@ -295,7 +284,7 @@ public class MainWindow extends JFrame {
 		numEight.setBackground(SystemColor.control);
 		numEight.setForeground(new Color(0, 0, 0));
 		numEight.setFont(new Font("Tahoma", Font.PLAIN, 11));
-		numEight.setBounds(380, 137, 59, 38);
+		numEight.setBounds(271, 138, 59, 38);
 		contentPane.add(numEight);
 		
 		JButton numSeven = new JButton("7");
@@ -308,7 +297,7 @@ public class MainWindow extends JFrame {
 		numSeven.setBackground(SystemColor.control);
 		numSeven.setForeground(new Color(0, 0, 0));
 		numSeven.setFont(new Font("Tahoma", Font.PLAIN, 11));
-		numSeven.setBounds(315, 137, 59, 38);
+		numSeven.setBounds(206, 138, 59, 38);
 		contentPane.add(numSeven);
 		
 		JButton numSix = new JButton("6");
@@ -321,7 +310,7 @@ public class MainWindow extends JFrame {
 		numSix.setBackground(SystemColor.control);
 		numSix.setForeground(new Color(0, 0, 0));
 		numSix.setFont(new Font("Tahoma", Font.PLAIN, 11));
-		numSix.setBounds(442, 181, 59, 38);
+		numSix.setBounds(333, 182, 59, 38);
 		contentPane.add(numSix);
 		
 		JButton numFive = new JButton("5");
@@ -334,7 +323,7 @@ public class MainWindow extends JFrame {
 		numFive.setBackground(SystemColor.control);
 		numFive.setForeground(new Color(0, 0, 0));
 		numFive.setFont(new Font("Tahoma", Font.PLAIN, 11));
-		numFive.setBounds(380, 180, 59, 38);
+		numFive.setBounds(271, 181, 59, 38);
 		contentPane.add(numFive);
 		
 		JButton numFour = new JButton("4");
@@ -347,7 +336,7 @@ public class MainWindow extends JFrame {
 		numFour.setBackground(SystemColor.control);
 		numFour.setForeground(new Color(0, 0, 0));
 		numFour.setFont(new Font("Tahoma", Font.PLAIN, 11));
-		numFour.setBounds(315, 181, 59, 38);
+		numFour.setBounds(206, 182, 59, 38);
 		contentPane.add(numFour);
 		
 		JButton numThree = new JButton("3");
@@ -360,7 +349,7 @@ public class MainWindow extends JFrame {
 		numThree.setBackground(SystemColor.control);
 		numThree.setForeground(new Color(0, 0, 0));
 		numThree.setFont(new Font("Tahoma", Font.PLAIN, 11));
-		numThree.setBounds(442, 225, 59, 38);
+		numThree.setBounds(333, 226, 59, 38);
 		contentPane.add(numThree);
 		
 		JButton numTwo = new JButton("2");
@@ -373,7 +362,7 @@ public class MainWindow extends JFrame {
 		numTwo.setBackground(SystemColor.control);
 		numTwo.setForeground(new Color(0, 0, 0));
 		numTwo.setFont(new Font("Tahoma", Font.PLAIN, 11));
-		numTwo.setBounds(380, 225, 59, 38);
+		numTwo.setBounds(271, 226, 59, 38);
 		contentPane.add(numTwo);
 		
 		JButton numOne = new JButton("1");
@@ -386,7 +375,7 @@ public class MainWindow extends JFrame {
 		numOne.setBackground(SystemColor.control);
 		numOne.setForeground(new Color(0, 0, 0));
 		numOne.setFont(new Font("Tahoma", Font.PLAIN, 11));
-		numOne.setBounds(315, 225, 59, 38);
+		numOne.setBounds(206, 226, 59, 38);
 		contentPane.add(numOne);
 		
 		JButton numZero = new JButton("0");
@@ -399,7 +388,7 @@ public class MainWindow extends JFrame {
 		numZero.setBackground(SystemColor.control);
 		numZero.setForeground(new Color(0, 0, 0));
 		numZero.setFont(new Font("Tahoma", Font.PLAIN, 11));
-		numZero.setBounds(315, 269, 124, 38);
+		numZero.setBounds(206, 270, 124, 38);
 		contentPane.add(numZero);
 		
 		JButton numFullStop = new JButton(".");
@@ -412,89 +401,8 @@ public class MainWindow extends JFrame {
 		numFullStop.setBackground(SystemColor.control);
 		numFullStop.setForeground(new Color(0, 0, 0));
 		numFullStop.setFont(new Font("Tahoma", Font.PLAIN, 11));
-		numFullStop.setBounds(442, 269, 59, 38);
+		numFullStop.setBounds(333, 270, 59, 38);
 		contentPane.add(numFullStop);
-		
-		/*
-		 * Hexadecimal buttons
-		 */
-		JButton numA = new JButton("A");
-		numA.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				calculator.clickNumber('A');
-			}
-		});
-		numA.setMargin(new Insets(2, 5, 2, 5));
-		numA.setBackground(SystemColor.control);
-		numA.setForeground(new Color(0, 0, 0));
-		numA.setFont(new Font("Tahoma", Font.PLAIN, 11));
-		numA.setBounds(57, 181, 59, 38);
-		contentPane.add(numA);
-		
-		JButton numB = new JButton("B");
-		numB.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				calculator.clickNumber('B');
-			}
-		});
-		numB.setMargin(new Insets(2, 5, 2, 5));
-		numB.setBackground(SystemColor.control);
-		numB.setForeground(new Color(0, 0, 0));
-		numB.setFont(new Font("Tahoma", Font.PLAIN, 11));
-		numB.setBounds(122, 181, 59, 38);
-		contentPane.add(numB);
-		
-		JButton numC = new JButton("C");
-		numC.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				calculator.clickNumber('C');
-			}
-		});
-		numC.setMargin(new Insets(2, 5, 2, 5));
-		numC.setBackground(SystemColor.control);
-		numC.setForeground(new Color(0, 0, 0));
-		numC.setFont(new Font("Tahoma", Font.PLAIN, 11));
-		numC.setBounds(57, 225, 59, 38);
-		contentPane.add(numC);
-		
-		JButton numD = new JButton("D");
-		numD.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				calculator.clickNumber('D');
-			}
-		});
-		numD.setMargin(new Insets(2, 5, 2, 5));
-		numD.setBackground(SystemColor.control);
-		numD.setForeground(new Color(0, 0, 0));
-		numD.setFont(new Font("Tahoma", Font.PLAIN, 11));
-		numD.setBounds(122, 225, 59, 38);
-		contentPane.add(numD);
-		
-		JButton numE = new JButton("E");
-		numE.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				calculator.clickNumber('E');
-			}
-		});
-		numE.setMargin(new Insets(2, 5, 2, 5));
-		numE.setBackground(SystemColor.control);
-		numE.setForeground(new Color(0, 0, 0));
-		numE.setFont(new Font("Tahoma", Font.PLAIN, 11));
-		numE.setBounds(55, 267, 59, 38);
-		contentPane.add(numE);
-		
-		JButton numF = new JButton("F");
-		numF.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				calculator.clickNumber('F');
-			}
-		});
-		numF.setMargin(new Insets(2, 5, 2, 5));
-		numF.setBackground(SystemColor.control);
-		numF.setForeground(new Color(0, 0, 0));
-		numF.setFont(new Font("Tahoma", Font.PLAIN, 11));
-		numF.setBounds(120, 267, 59, 38);
-		contentPane.add(numF);
 		
 		/*
 		 * Operators
@@ -509,7 +417,7 @@ public class MainWindow extends JFrame {
 		opMinus.setBackground(SystemColor.control);
 		opMinus.setForeground(new Color(0, 0, 0));
 		opMinus.setFont(new Font("Tahoma", Font.PLAIN, 11));
-		opMinus.setBounds(516, 181, 59, 38);
+		opMinus.setBounds(407, 182, 59, 38);
 		contentPane.add(opMinus);
 		
 		JButton opPlus = new JButton("+");
@@ -522,7 +430,7 @@ public class MainWindow extends JFrame {
 		opPlus.setBackground(SystemColor.control);
 		opPlus.setForeground(new Color(0, 0, 0));
 		opPlus.setFont(new Font("Tahoma", Font.PLAIN, 11));
-		opPlus.setBounds(516, 225, 59, 38);
+		opPlus.setBounds(407, 226, 59, 38);
 		contentPane.add(opPlus);
 		
 		JButton opDivide = new JButton("/");
@@ -535,7 +443,7 @@ public class MainWindow extends JFrame {
 		opDivide.setBackground(SystemColor.control);
 		opDivide.setForeground(new Color(0, 0, 0));
 		opDivide.setFont(new Font("Tahoma", Font.PLAIN, 11));
-		opDivide.setBounds(581, 182, 59, 38);
+		opDivide.setBounds(472, 183, 59, 38);
 		contentPane.add(opDivide);
 		
 		JButton opMultiply = new JButton("*");
@@ -548,7 +456,7 @@ public class MainWindow extends JFrame {
 		opMultiply.setBackground(SystemColor.control);
 		opMultiply.setForeground(new Color(0, 0, 0));
 		opMultiply.setFont(new Font("Tahoma", Font.PLAIN, 11));
-		opMultiply.setBounds(581, 225, 59, 38);
+		opMultiply.setBounds(472, 226, 59, 38);
 		contentPane.add(opMultiply);
 		
 		JButton opEquals = new JButton("=");
@@ -561,7 +469,7 @@ public class MainWindow extends JFrame {
 		opEquals.setBackground(SystemColor.control);
 		opEquals.setForeground(new Color(0, 0, 0));
 		opEquals.setFont(new Font("Tahoma", Font.PLAIN, 11));
-		opEquals.setBounds(516, 269, 124, 38);
+		opEquals.setBounds(407, 270, 124, 38);
 		contentPane.add(opEquals);
 		
 		JButton opSignChange = new JButton("+/-");
@@ -574,7 +482,7 @@ public class MainWindow extends JFrame {
 		opSignChange.setBackground(SystemColor.control);
 		opSignChange.setForeground(new Color(0, 0, 0));
 		opSignChange.setFont(new Font("Tahoma", Font.PLAIN, 11));
-		opSignChange.setBounds(378, 94, 59, 38);
+		opSignChange.setBounds(269, 95, 59, 38);
 		contentPane.add(opSignChange);
 		
 		JButton opSqrt = new JButton("\u221A");
@@ -587,7 +495,7 @@ public class MainWindow extends JFrame {
 		opSqrt.setBackground(SystemColor.control);
 		opSqrt.setForeground(new Color(0, 0, 0));
 		opSqrt.setFont(new Font("Tahoma", Font.PLAIN, 11));
-		opSqrt.setBounds(250, 93, 59, 38);
+		opSqrt.setBounds(141, 94, 59, 38);
 		contentPane.add(opSqrt);
 		
 		/*
@@ -603,7 +511,7 @@ public class MainWindow extends JFrame {
 		trigSin.setBackground(SystemColor.control);
 		trigSin.setForeground(new Color(0, 0, 0));
 		trigSin.setFont(new Font("Tahoma", Font.PLAIN, 11));
-		trigSin.setBounds(250, 181, 59, 38);
+		trigSin.setBounds(141, 182, 59, 38);
 		contentPane.add(trigSin);
 		
 		JButton trigCos = new JButton("Cos");
@@ -616,7 +524,7 @@ public class MainWindow extends JFrame {
 		trigCos.setBackground(SystemColor.control);
 		trigCos.setForeground(new Color(0, 0, 0));
 		trigCos.setFont(new Font("Tahoma", Font.PLAIN, 11));
-		trigCos.setBounds(250, 224, 59, 38);
+		trigCos.setBounds(141, 225, 59, 38);
 		contentPane.add(trigCos);
 		
 		JButton trigTan = new JButton("Tan");
@@ -629,7 +537,7 @@ public class MainWindow extends JFrame {
 		trigTan.setBackground(SystemColor.control);
 		trigTan.setForeground(new Color(0, 0, 0));
 		trigTan.setFont(new Font("Tahoma", Font.PLAIN, 11));
-		trigTan.setBounds(250, 268, 59, 38);
+		trigTan.setBounds(141, 269, 59, 38);
 		contentPane.add(trigTan);
 		
 		JButton trigAsin = new JButton("Asin");
@@ -642,7 +550,7 @@ public class MainWindow extends JFrame {
 		trigAsin.setBackground(SystemColor.control);
 		trigAsin.setForeground(new Color(0, 0, 0));
 		trigAsin.setFont(new Font("Tahoma", Font.PLAIN, 11));
-		trigAsin.setBounds(185, 183, 59, 38);
+		trigAsin.setBounds(76, 184, 59, 38);
 		contentPane.add(trigAsin);
 		
 		JButton trigAcos = new JButton("Acos");
@@ -655,7 +563,7 @@ public class MainWindow extends JFrame {
 		trigAcos.setBackground(SystemColor.control);
 		trigAcos.setForeground(new Color(0, 0, 0));
 		trigAcos.setFont(new Font("Tahoma", Font.PLAIN, 11));
-		trigAcos.setBounds(185, 226, 59, 38);
+		trigAcos.setBounds(76, 227, 59, 38);
 		contentPane.add(trigAcos);
 		
 		JButton trigAtan = new JButton("Atan");
@@ -668,7 +576,7 @@ public class MainWindow extends JFrame {
 		trigAtan.setBackground(SystemColor.control);
 		trigAtan.setForeground(new Color(0, 0, 0));
 		trigAtan.setFont(new Font("Tahoma", Font.PLAIN, 11));
-		trigAtan.setBounds(185, 268, 59, 38);
+		trigAtan.setBounds(76, 269, 59, 38);
 		contentPane.add(trigAtan);
 		
 		/*
@@ -684,7 +592,7 @@ public class MainWindow extends JFrame {
 		numPi.setBackground(SystemColor.control);
 		numPi.setForeground(new Color(0, 0, 0));
 		numPi.setFont(new Font("Tahoma", Font.PLAIN, 11));
-		numPi.setBounds(57, 138, 59, 38);
+		numPi.setBounds(9, 270, 59, 38);
 		contentPane.add(numPi);
 		
 		/*
@@ -700,7 +608,7 @@ public class MainWindow extends JFrame {
 		opOpenBracket.setBackground(SystemColor.control);
 		opOpenBracket.setForeground(new Color(0, 0, 0));
 		opOpenBracket.setFont(new Font("Tahoma", Font.PLAIN, 11));
-		opOpenBracket.setBounds(185, 138, 59, 38);
+		opOpenBracket.setBounds(76, 139, 59, 38);
 		contentPane.add(opOpenBracket);
 		
 		JButton opCloseBracket = new JButton(")");
@@ -713,54 +621,16 @@ public class MainWindow extends JFrame {
 		opCloseBracket.setBackground(SystemColor.control);
 		opCloseBracket.setForeground(new Color(0, 0, 0));
 		opCloseBracket.setFont(new Font("Tahoma", Font.PLAIN, 11));
-		opCloseBracket.setBounds(250, 137, 59, 38);
+		opCloseBracket.setBounds(141, 138, 59, 38);
 		contentPane.add(opCloseBracket);
 		
 		openBracketCount = new JTextField();
 		openBracketCount.setFont(new Font("Tahoma", Font.PLAIN, 11));
 		openBracketCount.setEditable(false);
 		openBracketCount.setText("( = 0");
-		openBracketCount.setBounds(139, 142, 38, 29);
+		openBracketCount.setBounds(30, 143, 38, 29);
 		contentPane.add(openBracketCount);
 		openBracketCount.setColumns(10);
-		
-		/*
-		 * Converter functions
-		 */
-		JButton convDecToBase = new JButton("dec->base");
-		convDecToBase.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent arg0) {
-				calculator.convertFromDecimal();
-			}
-		});
-		convDecToBase.setMargin(new Insets(2, 5, 2, 5));
-		convDecToBase.setBackground(SystemColor.control);
-		convDecToBase.setForeground(new Color(0, 0, 0));
-		convDecToBase.setFont(new Font("Tahoma", Font.PLAIN, 11));
-		convDecToBase.setBounds(94, 92, 84, 38);
-		contentPane.add(convDecToBase);
-		
-		JButton convBinToDec = new JButton("base->dec");
-		convBinToDec.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent arg0) {
-				calculator.convertToDecimal();
-			}
-		});
-		convBinToDec.setMargin(new Insets(2, 5, 2, 5));
-		convBinToDec.setBackground(SystemColor.control);
-		convBinToDec.setForeground(new Color(0, 0, 0));
-		convBinToDec.setFont(new Font("Tahoma", Font.PLAIN, 11));
-		convBinToDec.setBounds(9, 92, 79, 38);
-		contentPane.add(convBinToDec);
-		
-		/*
-		 * Spinners
-		 */
-		convBaseSelect = new JSpinner();
-		convBaseSelect.setFont(new Font("Tahoma", Font.PLAIN, 11));
-		convBaseSelect.setModel(new SpinnerNumberModel(2, 2, 36, 1));
-		convBaseSelect.setBounds(184, 97, 47, 20);
-		contentPane.add(convBaseSelect);
 		
 		memLocationSelect = new JSpinner();
 		memLocationSelect.addChangeListener(new ChangeListener() {
@@ -770,7 +640,7 @@ public class MainWindow extends JFrame {
 		});
 		memLocationSelect.setFont(new Font("Tahoma", Font.PLAIN, 11));
 		memLocationSelect.setModel(new SpinnerNumberModel(1, 0, 9, 1));
-		memLocationSelect.setBounds(594, 59, 38, 20);
+		memLocationSelect.setBounds(493, 59, 38, 20);
 		contentPane.add(memLocationSelect);
 		
 		/*
@@ -786,7 +656,7 @@ public class MainWindow extends JFrame {
 		rdbtnDeg.setActionCommand("deg");
 		angleMode.add(rdbtnDeg);
 		rdbtnDeg.setSelected(true);
-		rdbtnDeg.setBounds(0, 140, 66, 23);
+		rdbtnDeg.setBounds(9, 171, 66, 23);
 		rdbtnDeg.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				rdbtnRad.setSelected(true);
@@ -800,38 +670,11 @@ public class MainWindow extends JFrame {
 		rdbtnRad.setBackground(SystemColor.control);
 		rdbtnRad.setActionCommand("rad");
 		angleMode.add(rdbtnRad);
-		rdbtnRad.setBounds(0, 166, 66, 23);
+		rdbtnRad.setBounds(9, 197, 66, 23);
 		rdbtnRad.setSelected(true);
 		contentPane.add(rdbtnRad);
 		
-		convOutput = new JTextField();
-		convOutput.addFocusListener(new FocusAdapter() {
-			@Override
-			public void focusGained(FocusEvent arg0) {
-				rdbtnConv.setSelected(true);
-			}
-		});
-		convOutput.setFont(new Font("Tahoma", Font.PLAIN, 11));
-		convOutput.setBounds(9, 60, 227, 20);
-		contentPane.add(convOutput);
-		convOutput.setColumns(10);
-		
 		functionSelector = new ButtonGroup();
-		
-		rdbtnConv = new JRadioButton("Conv");
-		rdbtnConv.setFont(new Font("Tahoma", Font.PLAIN, 11));
-		rdbtnConv.setActionCommand("conv");
-		functionSelector.add(rdbtnConv);
-		rdbtnConv.setBounds(-1, 222, 67, 23);
-		contentPane.add(rdbtnConv);
-		
-		rdbtnMath = new JRadioButton("Math");
-		rdbtnMath.setFont(new Font("Tahoma", Font.PLAIN, 11));
-		rdbtnMath.setActionCommand("math");
-		functionSelector.add(rdbtnMath);
-		rdbtnMath.setSelected(true);
-		rdbtnMath.setBounds(-1, 197, 67, 23);
-		contentPane.add(rdbtnMath);
 		
 		JButton exponentButton = new JButton("^");
 		exponentButton.addActionListener(new ActionListener() {
@@ -843,9 +686,7 @@ public class MainWindow extends JFrame {
 		exponentButton.setForeground(Color.BLACK);
 		exponentButton.setFont(new Font("Tahoma", Font.PLAIN, 11));
 		exponentButton.setBackground(SystemColor.menu);
-		exponentButton.setBounds(315, 94, 59, 38);
+		exponentButton.setBounds(206, 95, 59, 38);
 		contentPane.add(exponentButton);
-		
-		contentPane.setFocusTraversalPolicy(new FocusTraversalOnArray(new Component[]{inputText, memLocationSelect, numOne, numTwo, numThree, numFour, numFive, numSix, numSeven, numEight, numNine, numZero, numFullStop, opPlus, opMinus, opMultiply, opDivide, opEquals, clearButton, opOpenBracket, opCloseBracket, memStore, memRecall, opSignChange, exponentButton, opSqrt, trigSin, trigCos, trigTan, trigAsin, trigAcos, trigAtan, numPi, numA, numB, numC, numD, numE, numF, convBinToDec, convDecToBase, convBaseSelect, rdbtnDeg, rdbtnRad, rdbtnMath, rdbtnConv, finalOutput, currentEquation, convOutput, memContents, memScrollUp, memScrollDown, openBracketCount}));
 	}
 }

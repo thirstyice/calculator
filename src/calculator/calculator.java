@@ -35,28 +35,22 @@ static int operCount = 1;
 static char operator[] = new char[100];
 
 static void clearDisplay() {
-	if (MainWindow.functionSelector.getSelection().getActionCommand()=="conv") {
-		MainWindow.convOutput.setText("");
+	if (MainWindow.inputText.getText().isEmpty()==true) {
+		MainWindow.currentEquation.setText("");
+		MainWindow.openBracketCount.setText("( = 0");
+		trig= new int[3][100];
+		eqCount=1;
+		operCount=1;
+		trigCount = 0;
+		openBracketCount = 0;
+		closeBracketCount = 0;
 	} else {
-		if (MainWindow.inputText.getText().isEmpty()==true) {
-			MainWindow.currentEquation.setText("");
-			MainWindow.openBracketCount.setText("( = 0");
-			trig= new int[3][100];
-			eqCount=1;
-			operCount=1;
-			trigCount = 0;
-			openBracketCount = 0;
-			closeBracketCount = 0;
-		} else {
-			MainWindow.inputText.setText("");
-		}
+		MainWindow.inputText.setText("");
 	}
 }
 
 static void clickNumber(char number) {
-	if (MainWindow.functionSelector.getSelection().getActionCommand()=="conv") {
-		MainWindow.convOutput.setText(MainWindow.convOutput.getText() + number);
-	} else if (Character.isDigit(number)==true){
+	if (Character.isDigit(number)==true){
 		MainWindow.inputText.setText(MainWindow.inputText.getText() + number);
 	}
 }
@@ -307,63 +301,5 @@ static void recallPi() {
 		clickOperator('*');
 	}
 	MainWindow.inputText.setText("3.141592653589793238462643383");
-}
-/*
- * Base converter functions
- */
-static void convertFromDecimal() {
-	double converterInput;
-	int base = (Integer)MainWindow.convBaseSelect.getValue();
-	
-	if (MainWindow.convOutput.getText().matches("-?\\d+(\\.\\d+)?")==false) {
-		return;
-	} else {
-		if (MainWindow.convOutput.getText().isEmpty()==true) {
-			converterInput = (int)Math.round(finalResult);
-		} else {
-			converterInput = Integer.parseInt(MainWindow.convOutput.getText());
-		}
-	}
-	MainWindow.convOutput.setText("");
-	while (converterInput>0) {
-		converterInput/=base;
-		for (int i=0;i<(base);i++) {
-			if ((double)Math.round(converterInput * 10000)-(Math.floor(converterInput)*10000)==(double)Math.round(((double)i/(double)base) * 10000)) {
-				// Apparently, rounding to 4 decimal places in java is complicated. Very complicated
-				if (i<10) {
-					MainWindow.convOutput.setText( String.valueOf(i) + MainWindow.convOutput.getText());
-				} else {
-					MainWindow.convOutput.setText(String.valueOf((char)(i+55)) + MainWindow.convOutput.getText());
-				}
-			}
-		}
-		converterInput=Math.floor(converterInput);
-	}
-}
-static void convertToDecimal() {
-	String converterInput = MainWindow.convOutput.getText().toUpperCase();
-	int base = (Integer)MainWindow.convBaseSelect.getValue();
-	int inputLength = converterInput.length();
-	char[] inputNumber = new char[inputLength];
-	int output = 0;
-	int toBeAddedToOutput = 0;
-	for (int i=0;i<inputLength;i++) {
-		inputNumber[i] = converterInput.charAt(converterInput.length()-1);
-		converterInput=converterInput.substring(0, converterInput.length()-1);
-	}
-	for (int i=0;i<inputLength;i++) {
-		if (Character.isDigit(inputNumber[i])==true) {
-			toBeAddedToOutput = Character.getNumericValue(inputNumber[i]);
-		} else if (Character.isLetter(inputNumber[i])==true) {
-			toBeAddedToOutput = ((int)inputNumber[i] - 55);
-		} else {
-			return;
-		}
-		if (toBeAddedToOutput>base-1) {
-			return;
-		}
-		output += toBeAddedToOutput*Math.pow(base, i); // Don't assign directly to convOutput, that way original number is kept on failure
-	}
-	MainWindow.convOutput.setText(String.valueOf(output));
 }
 }
