@@ -536,12 +536,12 @@ public class MainWindow extends JFrame {
 		opSignChange.setBounds(180, 90, 61, 51);
 		contentPane.add(opSignChange);
 		
-		JButton opSqrt = new JButton("\u221A");
+		JButton opSqrt = new JButton("x√y");
 		opSqrt.setOpaque(true);
 		opSqrt.setBorder(new LineBorder(new Color(0, 0, 0)));;
 		opSqrt.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				calculator.clickSqrt();
+				calculator.clickOperator('√');
 			}
 		});
 		opSqrt.setMargin(new Insets(0, 0, 0, 0));
@@ -709,7 +709,7 @@ public class MainWindow extends JFrame {
 		
 		
 		
-		JButton exponentButton = new JButton("^");
+		JButton exponentButton = new JButton("x^y");
 		exponentButton.setOpaque(true);
 		exponentButton.setBorder(new LineBorder(new Color(0, 0, 0)));;
 		exponentButton.addActionListener(new ActionListener() {

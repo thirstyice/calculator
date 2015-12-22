@@ -146,6 +146,7 @@ static void calculate() {
 		}
 		
 		// Do the calculations
+		calculateForOperator('√', openBracket[openBracketPosition], closeBracket[closeBracketPosition]);
 		calculateForOperator('^', openBracket[openBracketPosition], closeBracket[closeBracketPosition]);
 		calculateForOperator('/', openBracket[openBracketPosition], closeBracket[closeBracketPosition]);
 		calculateForOperator('*', openBracket[openBracketPosition], closeBracket[closeBracketPosition]);
@@ -178,16 +179,18 @@ static void calculateForOperator(char op, int lowerBound, int higherBound) {
 	for (int index=lowerBound; index < higherBound; index++) {
 		if (operator[index]==op) {
 			switch (op) {
-				case '^': equation[index]=Math.pow(equation[index], equation[index+1]);
-					break;
-				case '/': equation[index]=equation[index] / equation[index+1];
-					break;
-				case '*': equation[index]=equation[index] * equation[index+1];
-					break;
-				case '+': equation[index]=equation[index] + equation[index+1];
-					break;
-				case '-': equation[index]=equation[index] - equation[index+1];
-					break;
+			case '√': equation[index]=Math.pow(equation[index+1], (1/equation[index]));
+			break;
+			case '^': equation[index]=Math.pow(equation[index], equation[index+1]);
+			break;
+			case '/': equation[index]=equation[index] / equation[index+1];
+			break;
+			case '*': equation[index]=equation[index] * equation[index+1];
+			break;
+			case '+': equation[index]=equation[index] + equation[index+1];
+			break;
+			case '-': equation[index]=equation[index] - equation[index+1];
+			break;
 			}
 			for (int counter = index; counter<eqCount; counter++) {
 				equation[counter+1]=equation[counter+2];
