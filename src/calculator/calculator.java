@@ -24,12 +24,11 @@ public class calculator {
 static double memory[] = new double[10];
 static double equation[] = new double[100];
 static double finalResult;
-static int openBracket[] = new int[100];
-static int closeBracket[] = new int[100];
+static int bracket[][] = new int[100][2];
 static int func[][] = new int[6][100];
 static int funcCount = 0;
-static int openBracketCount = 0;
-static int closeBracketCount = 0;
+static int netBracketCount = 0;
+static int totalBracketPairs = 0;
 static int eqCount = 1;
 static int operCount = 1;
 static char operator[] = new char[100];
@@ -43,8 +42,7 @@ static void clearDisplay() {
 		eqCount=1;
 		operCount=1;
 		funcCount = 0;
-		openBracketCount = 0;
-		closeBracketCount = 0;
+		netBracketCount = 0;
 	} else {
 		MainWindow.inputText.setText("");
 	}
@@ -86,9 +84,8 @@ static void clickOperator(char op) {
 }
 static void clickEquals() {
 	// Close the unbalanced open brackets
-	while (openBracketCount>closeBracketCount) {
+	while (netBracketCount>0) {
 		clickCloseBracket();
-		System.out.println(closeBracketCount);
 	}
 	
 	if (MainWindow.inputText.getText().matches("-?\\d+(\\.\\d+)?")==true) {
@@ -109,60 +106,39 @@ static void clickEquals() {
 	storeNumberToMemory(0);
 	eqCount=1;
 	operCount=1;
-	openBracketCount = 0;
-	closeBracketCount = 0;
+	netBracketCount = 0;
 	updateBracketCount();
 }
 static void calculate() {
-	int openBracketPosition = 1;
-	int closeBracketPosition = 1;
 	// Check to make sure that there is, in fact, something to calculate
-	if (operCount==1 && funcCount==0 && closeBracketCount == 0) {
+	if (operCount==1 && funcCount==0 && bracket[0][1]!=0) {
 		finalResult=Double.parseDouble(MainWindow.inputText.getText());
 		return;
-	} else if (operCount==1 && funcCount==0 && closeBracketCount != 0) {
+	} else if (operCount==1 && funcCount==0 && bracket[0][1]==0) {
 		finalResult=equation[1];
 		return;
 	}
 	
 	
 	// Aaaaand, Begin!
-	while (openBracketCount>=0) {
-		// Get the position of the last open bracket
-		for (openBracketPosition = 0; openBracketPosition<99; openBracketPosition++){
-			if (openBracket[openBracketPosition]==0) {
-				break;
-			}
-		}
-		if (openBracketPosition > 0) {
-			// Correct for the statement above returning one more than the required number
-			openBracketPosition--;
-		}
-		// Find the matching close bracket
-		for (closeBracketPosition = 0; closeBracketPosition<99; closeBracketPosition++){
-			if (closeBracket[closeBracketPosition]>=openBracket[openBracketPosition]) {
-				break;
-			}
-		}
+	while (totalBracketPairs>0) {
+		totalBracketPairs--;
+		// Because zero-indexed arrays
 		
 		// Do the calculations
-		calculateForOperator('√', openBracket[openBracketPosition], closeBracket[closeBracketPosition]);
-		calculateForOperator('^', openBracket[openBracketPosition], closeBracket[closeBracketPosition]);
-		calculateForOperator('/', openBracket[openBracketPosition], closeBracket[closeBracketPosition]);
-		calculateForOperator('*', openBracket[openBracketPosition], closeBracket[closeBracketPosition]);
-		calculateForOperator('+', openBracket[openBracketPosition], closeBracket[closeBracketPosition]);
-		calculateForOperator('-', openBracket[openBracketPosition], closeBracket[closeBracketPosition]);
-		calculateTrig(openBracket[openBracketPosition]);
+		calculateForOperator('√', bracket[totalBracketPairs]);
+		calculateForOperator('^', bracket[totalBracketPairs]);
+		calculateForOperator('/', bracket[totalBracketPairs]);
+		calculateForOperator('*', bracket[totalBracketPairs]);
+		calculateForOperator('+', bracket[totalBracketPairs]);
+		calculateForOperator('-', bracket[totalBracketPairs]);
+		calculateTrig(bracket[totalBracketPairs][0]);
 		
 		// Done with this set of brackets
-		for (int i=openBracketPosition; i<openBracketCount; i++) {
-			openBracket[i]=openBracket[i+1];
-		}
-		for (int i=closeBracketPosition; i<closeBracketCount; i++) {
-			closeBracket[i]=closeBracket[i+1];
-		}
-		openBracketCount--;
-		closeBracketCount--;
+		bracket[totalBracketPairs][0] = 0;
+		bracket[totalBracketPairs][1] = 0;
+		
+		
 	}
 }
 
@@ -172,11 +148,11 @@ static void calculate() {
  * e.g. if the equation were 2*5+3*6, calculateForOperator('*',...)
  * 	would convert it to 10+18 by calculating 2*5 and 3*6
  */
-static void calculateForOperator(char op, int lowerBound, int higherBound) {
-	if (higherBound==0) {
-		higherBound=eqCount;
+static void calculateForOperator(char op, int[] bracketPair) {
+	if (bracketPair[1]==0) {
+		bracketPair[1]=eqCount;
 	}
-	for (int index=lowerBound; index < higherBound; index++) {
+	for (int index=bracketPair[0]; index < bracketPair[1]; index++) {
 		if (operator[index]==op) {
 			switch (op) {
 			case '√': equation[index]=Math.pow(equation[index+1], (1/equation[index]));
@@ -234,13 +210,15 @@ static void clickOpenBracket() {
 	if (MainWindow.inputText.getText().isEmpty()==false||MainWindow.currentEquation.getText().endsWith(")")==true) {
 		clickOperator('*');
 	}
-	openBracket[openBracketCount] = eqCount;
-	openBracketCount++;
+	bracket[totalBracketPairs][0] = eqCount;
+	netBracketCount++;
+	totalBracketPairs++;
 	MainWindow.currentEquation.setText(MainWindow.currentEquation.getText() + "(");
 	updateBracketCount();
 	}
 static void clickCloseBracket() {
-	if (openBracketCount-closeBracketCount==0) {
+	int position = totalBracketPairs-1;
+	if (netBracketCount==0) {
 		return;
 	}
 	if (MainWindow.inputText.getText().isEmpty()==false) {
@@ -248,15 +226,17 @@ static void clickCloseBracket() {
 	} else if (MainWindow.currentEquation.getText().endsWith("(")) {
 		clickNumber('0');
 	}
-	
+	while (bracket[position][1]!=0) {
+		position--;
+	}
 	MainWindow.currentEquation.setText(MainWindow.currentEquation.getText() + MainWindow.inputText.getText() + ")");
 	MainWindow.inputText.setText("");
-	closeBracket[closeBracketCount] = eqCount;
-	closeBracketCount++;
+	bracket[position][1] = eqCount;
+	netBracketCount--;
 	updateBracketCount();
 }
 static void updateBracketCount() {
-	MainWindow.openBracketCount.setText("( = " + String.valueOf(openBracketCount - closeBracketCount));
+	MainWindow.openBracketCount.setText("( = " + String.valueOf(netBracketCount));
 }
 static void changeSign() {
 	if (MainWindow.inputText.getText().isEmpty()==true) {
