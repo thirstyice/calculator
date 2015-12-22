@@ -251,7 +251,9 @@ static void changeSign() {
  * Memory functions
  */
 static void displayMemoryContents() {
-	MainWindow.memContents.setText(String.valueOf(memory[(Integer)MainWindow.memLocationSelect.getValue()]));
+	if (MainWindow.memLocation.getText().isEmpty()==false) {
+		MainWindow.memContents.setText(String.valueOf(memory[Integer.valueOf(MainWindow.memLocation.getText())]));
+	}
 }
 static void storeNumberToMemory(int location) {
 	if (MainWindow.inputText.getText().isEmpty()==true) {
@@ -268,11 +270,11 @@ static void recallNumberFromMemory(int location) {
 	MainWindow.inputText.setText(String.valueOf(memory[location]));
 }
 static void incrementMemoryLocation() {
-	MainWindow.memLocationSelect.setValue((Integer)MainWindow.memLocationSelect.getValue() + 1);
+	MainWindow.memLocation.setValue(Integer.valueOf(MainWindow.memLocation.getText()) + 1);
 	displayMemoryContents();
 }
 static void decrementMemoryLocation() {
-	MainWindow.memLocationSelect.setValue((Integer)MainWindow.memLocationSelect.getValue() - 1);
+	MainWindow.memLocation.setValue(Integer.valueOf(MainWindow.memLocation.getText()) - 1);
 	displayMemoryContents();
 }
 /*

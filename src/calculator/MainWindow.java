@@ -18,18 +18,25 @@ import java.awt.SystemColor;
 import java.awt.Insets;
 
 import javax.swing.event.ChangeListener;
+import javax.swing.text.NumberFormatter;
 import javax.swing.event.ChangeEvent;
 
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
-
-
+import java.text.NumberFormat;
 import java.awt.Component;
 import java.awt.event.FocusAdapter;
 import java.awt.event.FocusEvent;
 import org.eclipse.wb.swing.FocusTraversalOnArray;
+import javax.swing.SwingConstants;
+import javax.swing.JSeparator;
+import javax.swing.JFormattedTextField;
+import java.awt.Rectangle;
+import javax.swing.border.LineBorder;
+import java.awt.event.InputMethodListener;
+import java.awt.event.InputMethodEvent;
 
 
 public class MainWindow extends JFrame {
@@ -46,6 +53,8 @@ public class MainWindow extends JFrame {
 	static JTextField finalOutput;
 	static JTextField currentEquation;
 	static JTextField openBracketCount;
+	
+	static JFormattedTextField memLocation;
 	
 	static JButton memStore;
 	static JButton memRecall;
@@ -90,11 +99,7 @@ public class MainWindow extends JFrame {
 	static JButton convBinToDec;
 	static JButton convHexToDec;
 	
-	static JSpinner memLocationSelect;
-	
 	static ButtonGroup angleMode = new ButtonGroup();
-	JRadioButton rdbtnRad;
-	JRadioButton rdbtnDeg;
 	
 	static ButtonGroup functionSelector = new ButtonGroup();
 	/**
@@ -121,28 +126,44 @@ public class MainWindow extends JFrame {
 		setBackground(SystemColor.control);
 		setResizable(false);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		setBounds(100, 50, 539, 336);
+		setBounds(100, 50, 481, 356);
 		contentPane = new JPanel();
-		contentPane.setBackground(SystemColor.window);
+		contentPane.setBackground(Color.DARK_GRAY);
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		setContentPane(contentPane);
 		contentPane.setLayout(null);
 		/*
 		 *  Text fields
 		 */
-		finalOutput = new JTextField("0");
-		finalOutput.setFont(new Font("Tahoma", Font.PLAIN, 11));
+		
+		JSeparator vertSeparator = new JSeparator();
+		vertSeparator.setOrientation(SwingConstants.VERTICAL);
+		vertSeparator.setBounds(308, 25, 12, 29);
+		contentPane.add(vertSeparator);
+		finalOutput = new JTextField("0.0=0.0");
+		finalOutput.setHorizontalAlignment(SwingConstants.CENTER);
+		finalOutput.setBackground(Color.DARK_GRAY);
+		finalOutput.setForeground(Color.LIGHT_GRAY);
+		finalOutput.setBorder(javax.swing.BorderFactory.createEmptyBorder());
+		finalOutput.setFont(new Font("Helvetica", Font.PLAIN, 18));
 		finalOutput.setEditable(false);
-		finalOutput.setBounds(9, 6, 522, 20);
+		finalOutput.setBounds(9, 6, 466, 20);
 		contentPane.add(finalOutput);
 		
-		currentEquation = new JTextField("");
-		currentEquation.setFont(new Font("Tahoma", Font.PLAIN, 11));
+		currentEquation = new JTextField((String) null);
+		currentEquation.setBackground(Color.DARK_GRAY);
+		currentEquation.setForeground(Color.WHITE);
+		currentEquation.setBorder(javax.swing.BorderFactory.createEmptyBorder());
+		currentEquation.setHorizontalAlignment(SwingConstants.RIGHT);
+		currentEquation.setFont(new Font("Helvetica", Font.BOLD, 20));
 		currentEquation.setEditable(false);
-		currentEquation.setBounds(9, 34, 308, 20);
+		currentEquation.setBounds(9, 28, 298, 25);
 		contentPane.add(currentEquation);
 		
 		inputText = new JTextField();
+		inputText.setBackground(Color.DARK_GRAY);
+		inputText.setForeground(Color.WHITE);
+		inputText.setBorder(javax.swing.BorderFactory.createEmptyBorder());
 		inputText.addKeyListener(new KeyAdapter() {
 			public void keyTyped(KeyEvent e) {
 				char c = e.getKeyChar();
@@ -173,14 +194,20 @@ public class MainWindow extends JFrame {
 				calculator.clickEquals();
 			}
 		});
-		inputText.setFont(new Font("Tahoma", Font.PLAIN, 11));
-		inputText.setBounds(319, 34, 212, 20);
+		inputText.setFont(new Font("Helvetica", Font.PLAIN, 20));
+		inputText.setBounds(319, 28, 156, 25);
 		contentPane.add(inputText);
 		
 		memContents = new JTextField();
-		memContents.setFont(new Font("Tahoma", Font.PLAIN, 11));
+		memContents.setText("0.0");
+		memContents.setToolTipText("Stored numbers");
+		memContents.setHorizontalAlignment(SwingConstants.CENTER);
+		memContents.setForeground(Color.WHITE);
+		memContents.setBackground(Color.BLACK);
+		memContents.setBorder(javax.swing.BorderFactory.createEmptyBorder());
+		memContents.setFont(new Font("Helvetica", Font.ITALIC, 15));
 		memContents.setEditable(false);
-		memContents.setBounds(9, 59, 475, 20);
+		memContents.setBounds(0, 54, 450, 30);
 		contentPane.add(memContents);
 		memContents.setColumns(10);
 		/*
@@ -191,457 +218,513 @@ public class MainWindow extends JFrame {
 		 * Memory functions
 		 */
 		memStore = new JButton("Store");
+		memStore.setOpaque(true);
+		memStore.setBorder(new LineBorder(new Color(0, 0, 0)));;
 		memStore.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-				calculator.storeNumberToMemory((Integer)memLocationSelect.getValue());
+				calculator.storeNumberToMemory(Integer.valueOf(memLocation.getText()));
 			}
 		});
-		memStore.setMargin(new Insets(2, 5, 2, 5));
-		memStore.setBackground(SystemColor.control);
-		memStore.setForeground(new Color(0, 0, 0));
-		memStore.setFont(new Font("Tahoma", Font.PLAIN, 11));
-		memStore.setBounds(407, 96, 59, 38);
+		memStore.setMargin(new Insets(0, 0, 0, 0));
+		memStore.setBackground(new Color(51, 51, 51));
+		memStore.setForeground(new Color(255, 255, 255));
+		memStore.setFont(new Font("Helvetica", Font.PLAIN, 18));
+		memStore.setBounds(360, 134, 61, 51);
 		contentPane.add(memStore);
 		
 		memRecall = new JButton("Rec.");
+		memRecall.setOpaque(true);
+		memRecall.setBorder(new LineBorder(new Color(0, 0, 0)));;
 		memRecall.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				calculator.recallNumberFromMemory((Integer)memLocationSelect.getValue());
+				calculator.recallNumberFromMemory(Integer.valueOf(memLocation.getText()));
 			}
 		});
-		memRecall.setMargin(new Insets(2, 5, 2, 5));
-		memRecall.setBackground(SystemColor.control);
-		memRecall.setForeground(new Color(0, 0, 0));
-		memRecall.setFont(new Font("Tahoma", Font.PLAIN, 11));
-		memRecall.setBounds(407, 137, 59, 38);
+		memRecall.setMargin(new Insets(0, 0, 0, 0));
+		memRecall.setBackground(new Color(51, 51, 51));
+		memRecall.setForeground(new Color(255, 255, 255));
+		memRecall.setFont(new Font("Helvetica", Font.PLAIN, 18));
+		memRecall.setBounds(420, 134, 61, 51);
 		contentPane.add(memRecall);
 		
 		JButton memScrollDown = new JButton("v");
+		memScrollDown.setOpaque(true);
+		memScrollDown.setBorder(new LineBorder(new Color(0, 0, 0)));;
 		memScrollDown.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				calculator.decrementMemoryLocation();
 			}
 		});
-		memScrollDown.setMargin(new Insets(2, 5, 2, 5));
-		memScrollDown.setBackground(SystemColor.control);
-		memScrollDown.setForeground(new Color(0, 0, 0));
-		memScrollDown.setFont(new Font("Tahoma", Font.PLAIN, 11));
-		memScrollDown.setBounds(472, 137, 59, 38);
+		memScrollDown.setMargin(new Insets(0, 0, 0, 0));
+		memScrollDown.setBackground(new Color(51, 51, 51));
+		memScrollDown.setForeground(new Color(255, 255, 255));
+		memScrollDown.setFont(new Font("Helvetica", Font.PLAIN, 18));
+		memScrollDown.setBounds(420, 84, 61, 51);
 		contentPane.add(memScrollDown);
 		
 		JButton memScrollUp = new JButton("^");
+		memScrollUp.setOpaque(true);
+		memScrollUp.setBorder(new LineBorder(new Color(0, 0, 0)));;
 		memScrollUp.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				calculator.incrementMemoryLocation();
 			}
 		});
-		memScrollUp.setMargin(new Insets(2, 5, 2, 5));
-		memScrollUp.setBackground(SystemColor.control);
-		memScrollUp.setForeground(new Color(0, 0, 0));
-		memScrollUp.setFont(new Font("Tahoma", Font.PLAIN, 11));
-		memScrollUp.setBounds(472, 97, 59, 38);
+		memScrollUp.setMargin(new Insets(0, 0, 0, 0));
+		memScrollUp.setBackground(new Color(51, 51, 51));
+		memScrollUp.setForeground(new Color(255, 255, 255));
+		memScrollUp.setFont(new Font("Helvetica", Font.PLAIN, 18));
+		memScrollUp.setBounds(360, 84, 61, 51);
 		contentPane.add(memScrollUp);
 		
 		/*
 		 * Clear button
 		 */
 		clearButton = new JButton("AC");
+		clearButton.setOpaque(true);
+		clearButton.setBorder(new LineBorder(new Color(0, 0, 0)));;
 		clearButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				calculator.clearDisplay();
 			}
 		});
-		clearButton.setMargin(new Insets(2, 5, 2, 5));
-		clearButton.setBackground(SystemColor.control);
-		clearButton.setForeground(new Color(0, 0, 0));
-		clearButton.setFont(new Font("Tahoma", Font.PLAIN, 11));
-		clearButton.setBounds(333, 96, 59, 38);
+		clearButton.setMargin(new Insets(0, 0, 0, 0));
+		clearButton.setBackground(new Color(153, 153, 153));
+		clearButton.setForeground(Color.BLACK);
+		clearButton.setFont(new Font("Helvetica", Font.PLAIN, 18));
+		clearButton.setBounds(300, 84, 61, 51);
 		contentPane.add(clearButton);
 		
 		/*
 		 * Numerical buttons
 		 */
 		JButton numNine = new JButton("9");
+		numNine.setOpaque(true);
+		numNine.setBorder(new LineBorder(new Color(0, 0, 0)));;
 		numNine.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				calculator.clickNumber('9');
 			}
 		});
-		numNine.setMargin(new Insets(2, 5, 2, 5));
-		numNine.setBackground(SystemColor.control);
-		numNine.setForeground(new Color(0, 0, 0));
-		numNine.setFont(new Font("Tahoma", Font.PLAIN, 11));
-		numNine.setBounds(333, 138, 59, 38);
+		numNine.setMargin(new Insets(0, 0, 0, 0));
+		numNine.setBackground(new Color(204, 204, 204));
+		numNine.setForeground(Color.BLACK);
+		numNine.setFont(new Font("Helvetica", Font.PLAIN, 18));
+		numNine.setBounds(300, 134, 61, 51);
 		contentPane.add(numNine);
 		
 		JButton numEight = new JButton("8");
+		numEight.setOpaque(true);
+		numEight.setBorder(new LineBorder(new Color(0, 0, 0)));;
 		numEight.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				calculator.clickNumber('8');
 			}
 		});
-		numEight.setMargin(new Insets(2, 5, 2, 5));
-		numEight.setBackground(SystemColor.control);
-		numEight.setForeground(new Color(0, 0, 0));
-		numEight.setFont(new Font("Tahoma", Font.PLAIN, 11));
-		numEight.setBounds(271, 138, 59, 38);
+		numEight.setMargin(new Insets(0, 0, 0, 0));
+		numEight.setBackground(new Color(204, 204, 204));
+		numEight.setForeground(Color.BLACK);
+		numEight.setFont(new Font("Helvetica", Font.PLAIN, 18));
+		numEight.setBounds(240, 134, 61, 51);
 		contentPane.add(numEight);
 		
 		JButton numSeven = new JButton("7");
+		numSeven.setOpaque(true);
+		numSeven.setBorder(new LineBorder(new Color(0, 0, 0)));;
 		numSeven.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				calculator.clickNumber('7');
 			}
 		});
-		numSeven.setMargin(new Insets(2, 5, 2, 5));
-		numSeven.setBackground(SystemColor.control);
-		numSeven.setForeground(new Color(0, 0, 0));
-		numSeven.setFont(new Font("Tahoma", Font.PLAIN, 11));
-		numSeven.setBounds(206, 138, 59, 38);
+		numSeven.setMargin(new Insets(0, 0, 0, 0));
+		numSeven.setBackground(new Color(204, 204, 204));
+		numSeven.setForeground(Color.BLACK);
+		numSeven.setFont(new Font("Helvetica", Font.PLAIN, 18));
+		numSeven.setBounds(180, 134, 61, 51);
 		contentPane.add(numSeven);
 		
 		JButton numSix = new JButton("6");
+		numSix.setOpaque(true);
+		numSix.setBorder(new LineBorder(new Color(0, 0, 0)));;
 		numSix.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				calculator.clickNumber('6');
 			}
 		});
-		numSix.setMargin(new Insets(2, 5, 2, 5));
-		numSix.setBackground(SystemColor.control);
-		numSix.setForeground(new Color(0, 0, 0));
-		numSix.setFont(new Font("Tahoma", Font.PLAIN, 11));
-		numSix.setBounds(333, 182, 59, 38);
+		numSix.setMargin(new Insets(0, 0, 0, 0));
+		numSix.setBackground(new Color(204, 204, 204));
+		numSix.setForeground(Color.BLACK);
+		numSix.setFont(new Font("Helvetica", Font.PLAIN, 18));
+		numSix.setBounds(300, 184, 61, 51);
 		contentPane.add(numSix);
 		
 		JButton numFive = new JButton("5");
+		numFive.setOpaque(true);
+		numFive.setBorder(new LineBorder(new Color(0, 0, 0)));;
 		numFive.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				calculator.clickNumber('5');
 			}
 		});
-		numFive.setMargin(new Insets(2, 5, 2, 5));
-		numFive.setBackground(SystemColor.control);
-		numFive.setForeground(new Color(0, 0, 0));
-		numFive.setFont(new Font("Tahoma", Font.PLAIN, 11));
-		numFive.setBounds(271, 181, 59, 38);
+		numFive.setMargin(new Insets(0, 0, 0, 0));
+		numFive.setBackground(new Color(204, 204, 204));
+		numFive.setForeground(Color.BLACK);
+		numFive.setFont(new Font("Helvetica", Font.PLAIN, 18));
+		numFive.setBounds(240, 184, 61, 51);
 		contentPane.add(numFive);
 		
 		JButton numFour = new JButton("4");
+		numFour.setOpaque(true);
+		numFour.setBorder(new LineBorder(new Color(0, 0, 0)));;
 		numFour.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				calculator.clickNumber('4');
 			}
 		});
-		numFour.setMargin(new Insets(2, 5, 2, 5));
-		numFour.setBackground(SystemColor.control);
-		numFour.setForeground(new Color(0, 0, 0));
-		numFour.setFont(new Font("Tahoma", Font.PLAIN, 11));
-		numFour.setBounds(206, 182, 59, 38);
+		numFour.setMargin(new Insets(0, 0, 0, 0));
+		numFour.setBackground(new Color(204, 204, 204));
+		numFour.setForeground(Color.BLACK);
+		numFour.setFont(new Font("Helvetica", Font.PLAIN, 18));
+		numFour.setBounds(180, 184, 61, 51);
 		contentPane.add(numFour);
 		
 		JButton numThree = new JButton("3");
+		numThree.setOpaque(true);
+		numThree.setBorder(new LineBorder(new Color(0, 0, 0)));;
 		numThree.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				calculator.clickNumber('3');
 			}
 		});
-		numThree.setMargin(new Insets(2, 5, 2, 5));
-		numThree.setBackground(SystemColor.control);
-		numThree.setForeground(new Color(0, 0, 0));
-		numThree.setFont(new Font("Tahoma", Font.PLAIN, 11));
-		numThree.setBounds(333, 226, 59, 38);
+		numThree.setMargin(new Insets(0, 0, 0, 0));
+		numThree.setBackground(new Color(204, 204, 204));
+		numThree.setForeground(Color.BLACK);
+		numThree.setFont(new Font("Helvetica", Font.PLAIN, 18));
+		numThree.setBounds(300, 234, 61, 51);
 		contentPane.add(numThree);
 		
 		JButton numTwo = new JButton("2");
+		numTwo.setOpaque(true);
+		numTwo.setBorder(new LineBorder(new Color(0, 0, 0)));;
 		numTwo.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				calculator.clickNumber('2');
 			}
 		});
-		numTwo.setMargin(new Insets(2, 5, 2, 5));
-		numTwo.setBackground(SystemColor.control);
-		numTwo.setForeground(new Color(0, 0, 0));
-		numTwo.setFont(new Font("Tahoma", Font.PLAIN, 11));
-		numTwo.setBounds(271, 226, 59, 38);
+		numTwo.setMargin(new Insets(0, 0, 0, 0));
+		numTwo.setBackground(new Color(204, 204, 204));
+		numTwo.setForeground(Color.BLACK);
+		numTwo.setFont(new Font("Helvetica", Font.PLAIN, 18));
+		numTwo.setBounds(240, 234, 61, 51);
 		contentPane.add(numTwo);
 		
 		JButton numOne = new JButton("1");
+		numOne.setOpaque(true);
+		numOne.setBorder(new LineBorder(new Color(0, 0, 0)));;
 		numOne.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				calculator.clickNumber('1');
 			}
 		});
-		numOne.setMargin(new Insets(2, 5, 2, 5));
-		numOne.setBackground(SystemColor.control);
-		numOne.setForeground(new Color(0, 0, 0));
-		numOne.setFont(new Font("Tahoma", Font.PLAIN, 11));
-		numOne.setBounds(206, 226, 59, 38);
+		numOne.setMargin(new Insets(0, 0, 0, 0));
+		numOne.setBackground(new Color(204, 204, 204));
+		numOne.setForeground(Color.BLACK);
+		numOne.setFont(new Font("Helvetica", Font.PLAIN, 18));
+		numOne.setBounds(180, 234, 61, 51);
 		contentPane.add(numOne);
 		
 		JButton numZero = new JButton("0");
+		numZero.setOpaque(true);
+		numZero.setBorder(new LineBorder(new Color(0, 0, 0)));;
 		numZero.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				calculator.clickNumber('0');
 			}
 		});
-		numZero.setMargin(new Insets(2, 5, 2, 5));
-		numZero.setBackground(SystemColor.control);
-		numZero.setForeground(new Color(0, 0, 0));
-		numZero.setFont(new Font("Tahoma", Font.PLAIN, 11));
-		numZero.setBounds(206, 270, 124, 38);
+		numZero.setMargin(new Insets(0, 0, 0, 0));
+		numZero.setBackground(new Color(204, 204, 204));
+		numZero.setForeground(Color.BLACK);
+		numZero.setFont(new Font("Helvetica", Font.PLAIN, 18));
+		numZero.setBounds(180, 284, 121, 51);
 		contentPane.add(numZero);
 		
 		JButton numFullStop = new JButton(".");
+		numFullStop.setOpaque(true);
+		numFullStop.setBorder(new LineBorder(new Color(0, 0, 0)));;
 		numFullStop.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				calculator.clickFullStop();
 			}
 		});
-		numFullStop.setMargin(new Insets(2, 5, 2, 5));
-		numFullStop.setBackground(SystemColor.control);
-		numFullStop.setForeground(new Color(0, 0, 0));
-		numFullStop.setFont(new Font("Tahoma", Font.PLAIN, 11));
-		numFullStop.setBounds(333, 270, 59, 38);
+		numFullStop.setMargin(new Insets(0, 0, 0, 0));
+		numFullStop.setBackground(new Color(204, 204, 204));
+		numFullStop.setForeground(Color.BLACK);
+		numFullStop.setFont(new Font("Helvetica", Font.PLAIN, 18));
+		numFullStop.setBounds(300, 284, 61, 51);
 		contentPane.add(numFullStop);
 		
 		/*
 		 * Operators
 		 */
 		JButton opMinus = new JButton("-");
+		opMinus.setOpaque(true);
+		opMinus.setBorder(new LineBorder(new Color(0, 0, 0)));;
 		opMinus.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				calculator.clickOperator('-');
 			}
 		});
-		opMinus.setMargin(new Insets(2, 5, 2, 5));
-		opMinus.setBackground(SystemColor.control);
-		opMinus.setForeground(new Color(0, 0, 0));
-		opMinus.setFont(new Font("Tahoma", Font.PLAIN, 11));
-		opMinus.setBounds(407, 182, 59, 38);
+		opMinus.setMargin(new Insets(0, 0, 0, 0));
+		opMinus.setBackground(new Color(153, 0, 0));
+		opMinus.setForeground(Color.BLACK);
+		opMinus.setFont(new Font("Helvetica", Font.PLAIN, 18));
+		opMinus.setBounds(360, 184, 61, 51);
 		contentPane.add(opMinus);
 		
 		JButton opPlus = new JButton("+");
+		opPlus.setOpaque(true);
+		opPlus.setBorder(new LineBorder(new Color(0, 0, 0)));;
 		opPlus.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				calculator.clickOperator('+');
 			}
 		});
-		opPlus.setMargin(new Insets(2, 5, 2, 5));
-		opPlus.setBackground(SystemColor.control);
-		opPlus.setForeground(new Color(0, 0, 0));
-		opPlus.setFont(new Font("Tahoma", Font.PLAIN, 11));
-		opPlus.setBounds(407, 226, 59, 38);
+		opPlus.setMargin(new Insets(0, 0, 0, 0));
+		opPlus.setBackground(new Color(153, 0, 0));
+		opPlus.setForeground(Color.BLACK);
+		opPlus.setFont(new Font("Helvetica", Font.PLAIN, 18));
+		opPlus.setBounds(360, 234, 61, 51);
 		contentPane.add(opPlus);
 		
 		JButton opDivide = new JButton("/");
+		opDivide.setOpaque(true);
+		opDivide.setBorder(new LineBorder(new Color(0, 0, 0)));;
 		opDivide.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				calculator.clickOperator('/');
 			}
 		});
-		opDivide.setMargin(new Insets(2, 5, 2, 5));
-		opDivide.setBackground(SystemColor.control);
-		opDivide.setForeground(new Color(0, 0, 0));
-		opDivide.setFont(new Font("Tahoma", Font.PLAIN, 11));
-		opDivide.setBounds(472, 183, 59, 38);
+		opDivide.setMargin(new Insets(0, 0, 0, 0));
+		opDivide.setBackground(new Color(153, 0, 0));
+		opDivide.setForeground(Color.BLACK);
+		opDivide.setFont(new Font("Helvetica", Font.PLAIN, 18));
+		opDivide.setBounds(420, 184, 61, 51);
 		contentPane.add(opDivide);
 		
 		JButton opMultiply = new JButton("*");
+		opMultiply.setOpaque(true);
+		opMultiply.setBorder(new LineBorder(new Color(0, 0, 0)));;
 		opMultiply.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				calculator.clickOperator('*');
 			}
 		});
-		opMultiply.setMargin(new Insets(2, 5, 2, 5));
-		opMultiply.setBackground(SystemColor.control);
-		opMultiply.setForeground(new Color(0, 0, 0));
-		opMultiply.setFont(new Font("Tahoma", Font.PLAIN, 11));
-		opMultiply.setBounds(472, 226, 59, 38);
+		opMultiply.setMargin(new Insets(0, 0, 0, 0));
+		opMultiply.setBackground(new Color(153, 0, 0));
+		opMultiply.setForeground(Color.BLACK);
+		opMultiply.setFont(new Font("Helvetica", Font.PLAIN, 18));
+		opMultiply.setBounds(420, 234, 61, 51);
 		contentPane.add(opMultiply);
 		
 		JButton opEquals = new JButton("=");
+		opEquals.setOpaque(true);
+		opEquals.setBorder(new LineBorder(new Color(0, 0, 0)));;
 		opEquals.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				calculator.clickEquals();
 			}
 		});
-		opEquals.setMargin(new Insets(2, 5, 2, 5));
-		opEquals.setBackground(SystemColor.control);
-		opEquals.setForeground(new Color(0, 0, 0));
-		opEquals.setFont(new Font("Tahoma", Font.PLAIN, 11));
-		opEquals.setBounds(407, 270, 124, 38);
+		opEquals.setMargin(new Insets(0, 0, 0, 0));
+		opEquals.setBackground(new Color(153, 0, 0));
+		opEquals.setForeground(Color.BLACK);
+		opEquals.setFont(new Font("Helvetica", Font.PLAIN, 18));
+		opEquals.setBounds(360, 284, 121, 51);
 		contentPane.add(opEquals);
 		
 		JButton opSignChange = new JButton("+/-");
+		opSignChange.setOpaque(true);
+		opSignChange.setBorder(new LineBorder(new Color(0, 0, 0)));;
 		opSignChange.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				calculator.changeSign();
 			}
 		});
-		opSignChange.setMargin(new Insets(2, 5, 2, 5));
-		opSignChange.setBackground(SystemColor.control);
-		opSignChange.setForeground(new Color(0, 0, 0));
-		opSignChange.setFont(new Font("Tahoma", Font.PLAIN, 11));
-		opSignChange.setBounds(269, 95, 59, 38);
+		opSignChange.setMargin(new Insets(0, 0, 0, 0));
+		opSignChange.setBackground(new Color(153, 153, 153));
+		opSignChange.setForeground(Color.BLACK);
+		opSignChange.setFont(new Font("Helvetica", Font.PLAIN, 18));
+		opSignChange.setBounds(180, 84, 61, 51);
 		contentPane.add(opSignChange);
 		
 		JButton opSqrt = new JButton("\u221A");
+		opSqrt.setOpaque(true);
+		opSqrt.setBorder(new LineBorder(new Color(0, 0, 0)));;
 		opSqrt.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				calculator.clickSqrt();
 			}
 		});
-		opSqrt.setMargin(new Insets(2, 5, 2, 5));
-		opSqrt.setBackground(SystemColor.control);
-		opSqrt.setForeground(new Color(0, 0, 0));
-		opSqrt.setFont(new Font("Tahoma", Font.PLAIN, 11));
-		opSqrt.setBounds(141, 94, 59, 38);
+		opSqrt.setMargin(new Insets(0, 0, 0, 0));
+		opSqrt.setBackground(new Color(153, 153, 153));
+		opSqrt.setForeground(Color.BLACK);
+		opSqrt.setFont(new Font("Helvetica", Font.PLAIN, 18));
+		opSqrt.setBounds(120, 134, 61, 51);
 		contentPane.add(opSqrt);
 		
 		/*
 		 * Trigonometric functions
 		 */
 		JButton trigSin = new JButton("Sin");
+		trigSin.setOpaque(true);
+		trigSin.setBorder(new LineBorder(new Color(0, 0, 0)));;
 		trigSin.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				calculator.clickTrig("sin");
 			}
 		});
-		trigSin.setMargin(new Insets(2, 5, 2, 5));
-		trigSin.setBackground(SystemColor.control);
-		trigSin.setForeground(new Color(0, 0, 0));
-		trigSin.setFont(new Font("Tahoma", Font.PLAIN, 11));
-		trigSin.setBounds(141, 182, 59, 38);
+		trigSin.setMargin(new Insets(0, 0, 0, 0));
+		trigSin.setBackground(new Color(153, 153, 153));
+		trigSin.setForeground(Color.BLACK);
+		trigSin.setFont(new Font("Helvetica", Font.PLAIN, 18));
+		trigSin.setBounds(120, 184, 61, 51);
 		contentPane.add(trigSin);
 		
 		JButton trigCos = new JButton("Cos");
+		trigCos.setOpaque(true);
+		trigCos.setBorder(new LineBorder(new Color(0, 0, 0)));;
 		trigCos.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				calculator.clickTrig("cos");
 			}
 		});
-		trigCos.setMargin(new Insets(2, 5, 2, 5));
-		trigCos.setBackground(SystemColor.control);
-		trigCos.setForeground(new Color(0, 0, 0));
-		trigCos.setFont(new Font("Tahoma", Font.PLAIN, 11));
-		trigCos.setBounds(141, 225, 59, 38);
+		trigCos.setMargin(new Insets(0, 0, 0, 0));
+		trigCos.setBackground(new Color(153, 153, 153));
+		trigCos.setForeground(Color.BLACK);
+		trigCos.setFont(new Font("Helvetica", Font.PLAIN, 18));
+		trigCos.setBounds(120, 234, 61, 51);
 		contentPane.add(trigCos);
 		
 		JButton trigTan = new JButton("Tan");
+		trigTan.setOpaque(true);
+		trigTan.setBorder(new LineBorder(new Color(0, 0, 0)));;
 		trigTan.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				calculator.clickTrig("tan");
 			}
 		});
-		trigTan.setMargin(new Insets(2, 5, 2, 5));
-		trigTan.setBackground(SystemColor.control);
-		trigTan.setForeground(new Color(0, 0, 0));
-		trigTan.setFont(new Font("Tahoma", Font.PLAIN, 11));
-		trigTan.setBounds(141, 269, 59, 38);
+		trigTan.setMargin(new Insets(0, 0, 0, 0));
+		trigTan.setBackground(new Color(153, 153, 153));
+		trigTan.setForeground(Color.BLACK);
+		trigTan.setFont(new Font("Helvetica", Font.PLAIN, 18));
+		trigTan.setBounds(120, 284, 61, 51);
 		contentPane.add(trigTan);
 		
 		JButton trigAsin = new JButton("Asin");
+		trigAsin.setOpaque(true);
+		trigAsin.setBorder(new LineBorder(new Color(0, 0, 0)));;
 		trigAsin.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				calculator.clickTrig("asin");
 			}
 		});
-		trigAsin.setMargin(new Insets(2, 5, 2, 5));
-		trigAsin.setBackground(SystemColor.control);
-		trigAsin.setForeground(new Color(0, 0, 0));
-		trigAsin.setFont(new Font("Tahoma", Font.PLAIN, 11));
-		trigAsin.setBounds(76, 184, 59, 38);
+		trigAsin.setMargin(new Insets(0, 0, 0, 0));
+		trigAsin.setBackground(new Color(153, 153, 153));
+		trigAsin.setForeground(Color.BLACK);
+		trigAsin.setFont(new Font("Helvetica", Font.PLAIN, 18));
+		trigAsin.setBounds(60, 184, 61, 51);
 		contentPane.add(trigAsin);
 		
 		JButton trigAcos = new JButton("Acos");
+		trigAcos.setOpaque(true);
+		trigAcos.setBorder(new LineBorder(new Color(0, 0, 0)));;
 		trigAcos.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				calculator.clickTrig("acos");
 			}
 		});
-		trigAcos.setMargin(new Insets(2, 5, 2, 5));
-		trigAcos.setBackground(SystemColor.control);
-		trigAcos.setForeground(new Color(0, 0, 0));
-		trigAcos.setFont(new Font("Tahoma", Font.PLAIN, 11));
-		trigAcos.setBounds(76, 227, 59, 38);
+		trigAcos.setMargin(new Insets(0, 0, 0, 0));
+		trigAcos.setBackground(new Color(153, 153, 153));
+		trigAcos.setForeground(Color.BLACK);
+		trigAcos.setFont(new Font("Helvetica", Font.PLAIN, 18));
+		trigAcos.setBounds(60, 234, 61, 51);
 		contentPane.add(trigAcos);
 		
 		JButton trigAtan = new JButton("Atan");
+		trigAtan.setOpaque(true);
+		trigAtan.setBorder(new LineBorder(new Color(0, 0, 0)));;
 		trigAtan.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				calculator.clickTrig("atan");
 			}
 		});
-		trigAtan.setMargin(new Insets(2, 5, 2, 5));
-		trigAtan.setBackground(SystemColor.control);
-		trigAtan.setForeground(new Color(0, 0, 0));
-		trigAtan.setFont(new Font("Tahoma", Font.PLAIN, 11));
-		trigAtan.setBounds(76, 269, 59, 38);
+		trigAtan.setMargin(new Insets(0, 0, 0, 0));
+		trigAtan.setBackground(new Color(153, 153, 153));
+		trigAtan.setForeground(Color.BLACK);
+		trigAtan.setFont(new Font("Helvetica", Font.PLAIN, 18));
+		trigAtan.setBounds(60, 284, 61, 51);
 		contentPane.add(trigAtan);
 		
 		/*
 		 * Pi
 		 */
 		JButton numPi = new JButton("\u03C0");
+		numPi.setOpaque(true);
+		numPi.setBorder(new LineBorder(new Color(0, 0, 0)));;
 		numPi.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				calculator.recallPi();
 			}
 		});
-		numPi.setMargin(new Insets(2, 5, 2, 5));
-		numPi.setBackground(SystemColor.control);
-		numPi.setForeground(new Color(0, 0, 0));
-		numPi.setFont(new Font("Tahoma", Font.PLAIN, 11));
-		numPi.setBounds(9, 270, 59, 38);
+		numPi.setMargin(new Insets(0, 0, 0, 0));
+		numPi.setBackground(new Color(153, 153, 153));
+		numPi.setForeground(Color.BLACK);
+		numPi.setFont(new Font("Helvetica", Font.PLAIN, 18));
+		numPi.setBounds(0, 184, 61, 51);
 		contentPane.add(numPi);
 		
 		/*
 		 * Brackets
 		 */
 		JButton opOpenBracket = new JButton("(");
+		opOpenBracket.setOpaque(true);
+		opOpenBracket.setBorder(new LineBorder(new Color(0, 0, 0)));;
 		opOpenBracket.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				calculator.clickOpenBracket();
 			}
 		});
-		opOpenBracket.setMargin(new Insets(2, 5, 2, 5));
-		opOpenBracket.setBackground(SystemColor.control);
-		opOpenBracket.setForeground(new Color(0, 0, 0));
-		opOpenBracket.setFont(new Font("Tahoma", Font.PLAIN, 11));
-		opOpenBracket.setBounds(76, 139, 59, 38);
+		opOpenBracket.setMargin(new Insets(0, 0, 0, 0));
+		opOpenBracket.setBackground(new Color(153, 153, 153));
+		opOpenBracket.setForeground(Color.BLACK);
+		opOpenBracket.setFont(new Font("Helvetica", Font.PLAIN, 18));
+		opOpenBracket.setBounds(60, 84, 61, 51);
 		contentPane.add(opOpenBracket);
 		
 		JButton opCloseBracket = new JButton(")");
+		opCloseBracket.setOpaque(true);
+		opCloseBracket.setBorder(new LineBorder(new Color(0, 0, 0)));;
 		opCloseBracket.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				calculator.clickCloseBracket();
 			}
 		});
-		opCloseBracket.setMargin(new Insets(2, 5, 2, 5));
-		opCloseBracket.setBackground(SystemColor.control);
-		opCloseBracket.setForeground(new Color(0, 0, 0));
-		opCloseBracket.setFont(new Font("Tahoma", Font.PLAIN, 11));
-		opCloseBracket.setBounds(141, 138, 59, 38);
+		opCloseBracket.setMargin(new Insets(0, 0, 0, 0));
+		opCloseBracket.setBackground(new Color(153, 153, 153));
+		opCloseBracket.setForeground(Color.BLACK);
+		opCloseBracket.setFont(new Font("Helvetica", Font.PLAIN, 18));
+		opCloseBracket.setBounds(120, 84, 61, 51);
 		contentPane.add(opCloseBracket);
 		
 		openBracketCount = new JTextField();
-		openBracketCount.setFont(new Font("Tahoma", Font.PLAIN, 11));
+		openBracketCount.setHorizontalAlignment(SwingConstants.CENTER);
+		openBracketCount.setBorder(new LineBorder(new Color(0, 0, 0)));
+		openBracketCount.setBackground(Color.GRAY);
+		openBracketCount.setFont(new Font("Helvetica", Font.PLAIN, 18));
 		openBracketCount.setEditable(false);
 		openBracketCount.setText("( = 0");
-		openBracketCount.setBounds(30, 143, 38, 29);
+		openBracketCount.setBounds(0, 84, 61, 51);
 		contentPane.add(openBracketCount);
 		openBracketCount.setColumns(10);
-		
-		memLocationSelect = new JSpinner();
-		memLocationSelect.addChangeListener(new ChangeListener() {
-			public void stateChanged(ChangeEvent arg0) {
-				calculator.displayMemoryContents();
-			}
-		});
-		memLocationSelect.setFont(new Font("Tahoma", Font.PLAIN, 11));
-		memLocationSelect.setModel(new SpinnerNumberModel(1, 0, 9, 1));
-		memLocationSelect.setBounds(493, 59, 38, 20);
-		contentPane.add(memLocationSelect);
 		
 		/*
 		 * Radio buttons
@@ -649,44 +732,55 @@ public class MainWindow extends JFrame {
 		
 		angleMode = new ButtonGroup();
 		
-		rdbtnDeg = new JRadioButton("Deg");
-		rdbtnDeg.setForeground(new Color(0, 0, 0));
-		rdbtnDeg.setFont(new Font("Tahoma", Font.PLAIN, 11));
-		rdbtnDeg.setBackground(SystemColor.control);
-		rdbtnDeg.setActionCommand("deg");
-		angleMode.add(rdbtnDeg);
-		rdbtnDeg.setSelected(true);
-		rdbtnDeg.setBounds(9, 171, 66, 23);
-		rdbtnDeg.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				rdbtnRad.setSelected(true);
-			}
-		});
-		contentPane.add(rdbtnDeg);
-		
-		rdbtnRad = new JRadioButton("Rad");
-		rdbtnRad.setForeground(new Color(0, 0, 0));
-		rdbtnRad.setFont(new Font("Tahoma", Font.PLAIN, 11));
-		rdbtnRad.setBackground(SystemColor.control);
-		rdbtnRad.setActionCommand("rad");
-		angleMode.add(rdbtnRad);
-		rdbtnRad.setBounds(9, 197, 66, 23);
-		rdbtnRad.setSelected(true);
-		contentPane.add(rdbtnRad);
-		
 		functionSelector = new ButtonGroup();
 		
 		JButton exponentButton = new JButton("^");
+		exponentButton.setOpaque(true);
+		exponentButton.setBorder(new LineBorder(new Color(0, 0, 0)));;
 		exponentButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				calculator.clickOperator('^');
 			}
 		});
-		exponentButton.setMargin(new Insets(2, 5, 2, 5));
+		exponentButton.setMargin(new Insets(0, 0, 0, 0));
 		exponentButton.setForeground(Color.BLACK);
-		exponentButton.setFont(new Font("Tahoma", Font.PLAIN, 11));
-		exponentButton.setBackground(SystemColor.menu);
-		exponentButton.setBounds(206, 95, 59, 38);
+		exponentButton.setFont(new Font("Helvetica", Font.PLAIN, 18));
+		exponentButton.setBackground(new Color(153, 153, 153));
+		exponentButton.setBounds(60, 134, 61, 51);
 		contentPane.add(exponentButton);
+		
+		JSeparator separator = new JSeparator();
+		separator.setBounds(6, 21, 469, 12);
+		contentPane.add(separator);
+		
+		memLocation = new JFormattedTextField();
+		memLocation.setEditable(false);
+		memLocation.setBackground(Color.BLACK);
+		memLocation.setHorizontalAlignment(SwingConstants.CENTER);
+		memLocation.setForeground(Color.WHITE);
+		memLocation.setBorder(javax.swing.BorderFactory.createEmptyBorder());
+		memLocation.setText("1");
+		memLocation.setBounds(450, 54, 31, 30);
+		contentPane.add(memLocation);
+		
+		JButton btnDeg = new JButton("Deg");
+		btnDeg.setOpaque(true);
+		btnDeg.setMargin(new Insets(0, 0, 0, 0));
+		btnDeg.setForeground(Color.BLACK);
+		btnDeg.setFont(new Font("Helvetica", Font.PLAIN, 18));
+		btnDeg.setBorder(new LineBorder(new Color(0, 0, 0)));
+		btnDeg.setBackground(new Color(153, 153, 153));
+		btnDeg.setBounds(0, 134, 61, 26);
+		contentPane.add(btnDeg);
+		
+		JButton btnRad = new JButton("Rad");
+		btnRad.setOpaque(true);
+		btnRad.setMargin(new Insets(0, 0, 0, 0));
+		btnRad.setForeground(Color.BLACK);
+		btnRad.setFont(new Font("Helvetica", Font.PLAIN, 18));
+		btnRad.setBorder(new LineBorder(new Color(0, 0, 0)));
+		btnRad.setBackground(new Color(51, 153, 204));
+		btnRad.setBounds(0, 159, 61, 26);
+		contentPane.add(btnRad);
 	}
 }
