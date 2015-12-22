@@ -1,5 +1,7 @@
 package calculator;
 
+import java.awt.Color;
+
 import javax.swing.JOptionPane;
 
 /*	Cross-platform calculator
@@ -21,7 +23,6 @@ import javax.swing.JOptionPane;
 public class calculator {
 static double memory[] = new double[10];
 static double equation[] = new double[100];
-static double exponent[] = new double[100];
 static double finalResult;
 static int openBracket[] = new int[100];
 static int closeBracket[] = new int[100];
@@ -29,10 +30,10 @@ static int trig[][] = new int[6][100];
 static int trigCount = 0;
 static int openBracketCount = 0;
 static int closeBracketCount = 0;
-static int exponentCount = 0;
 static int eqCount = 1;
 static int operCount = 1;
 static char operator[] = new char[100];
+static char angleType = 'r';
 
 static void clearDisplay() {
 	if (MainWindow.inputText.getText().isEmpty()==true) {
@@ -84,14 +85,23 @@ static void clickOperator(char op) {
 	MainWindow.inputText.setText("");
 }
 static void clickEquals() {
+	// Close the unbalanced open brackets
+	while (openBracketCount>closeBracketCount) {
+		clickCloseBracket();
+		System.out.println(closeBracketCount);
+	}
+	
 	if (MainWindow.inputText.getText().matches("-?\\d+(\\.\\d+)?")==true) {
+		// If Input is a number
 		equation[eqCount] = Double.parseDouble(MainWindow.inputText.getText());
 		eqCount++;
 	} else if (MainWindow.currentEquation.getText().endsWith(")")==false) {
+		// If input is not a number (else), but it should be (if)
 		JOptionPane.showMessageDialog(MainWindow.frame, "Input not a number", "Warning", JOptionPane.ERROR_MESSAGE);
 		return;
 	}
-	MainWindow.currentEquation.setText(MainWindow.currentEquation.getText() + MainWindow.inputText.getText()+ "=");
+	
+	MainWindow.currentEquation.setText(MainWindow.currentEquation.getText() + MainWindow.inputText.getText() + "=");
 	calculate();
 	MainWindow.finalOutput.setText(MainWindow.currentEquation.getText() + String.valueOf(finalResult));
 	MainWindow.currentEquation.setText("");
@@ -115,11 +125,7 @@ static void calculate() {
 		return;
 	}
 	
-	// Close the unbalanced open brackets
-	while (openBracketCount>closeBracketCount) {
-		closeBracketCount++;
-		closeBracket[closeBracketCount]=eqCount;
-	}
+	
 	// Aaaaand, Begin!
 	for (closeBracketPosition = 0; openBracketCount>=0; closeBracketPosition++) {
 		// Get the position of the last open bracket
@@ -128,12 +134,17 @@ static void calculate() {
 				break;
 			}
 		}
-		// Don't remember what this accomplishes, but it does do something
 		if (openBracketPosition > 0) {
+			// Correct for the statement above returning one more than the required number
 			openBracketPosition--;
-		} else {
-			closeBracket[closeBracketPosition] = eqCount;
 		}
+		// Find the matching close bracket
+		for (closeBracketPosition = 0; closeBracketPosition<99; closeBracketPosition++){
+			if (closeBracket[closeBracketPosition]>=openBracket[openBracketPosition]) {
+				break;
+			}
+		}
+		
 		// Do the calculations
 		calculateForOperator('^', openBracket[openBracketPosition], closeBracket[closeBracketPosition]);
 		calculateForOperator('/', openBracket[openBracketPosition], closeBracket[closeBracketPosition]);
@@ -153,6 +164,13 @@ static void calculate() {
 		closeBracketCount--;
 	}
 }
+
+/* 
+ * calculateForOperator(...):
+ * Calculates all of the given operator between two points in the equation
+ * e.g. if the equation were 2*5+3*6, calculateForOperator('*',...)
+ * 	would convert it to 10+18 by calculating 2*5 and 3*6
+ */
 static void calculateForOperator(char op, int lowerBound, int higherBound) {
 	if (higherBound==0) {
 		higherBound=eqCount;
@@ -185,6 +203,9 @@ static void calculateTrig(int place) {
 	for (int function=0; function<6; function++) {
 		for (int counter = 0; counter<trigCount;counter++) {
 			if (trig[function][counter]==place) {
+				if (angleType=='d') {
+					equation[place]=equation[place]*(Math.PI/180);
+				}
 				if (function==0) {
 					equation[place]=Math.sin(equation[place]);
 				} else if (function==1) {
@@ -217,12 +238,12 @@ static void clickCloseBracket() {
 	if (openBracketCount-closeBracketCount==0) {
 		return;
 	}
-	if (MainWindow.currentEquation.getText().endsWith("(")) {
-		clickNumber('0');
-	}
 	if (MainWindow.inputText.getText().isEmpty()==false) {
 		equation[eqCount] = Double.parseDouble(MainWindow.inputText.getText());
+	} else if (MainWindow.currentEquation.getText().endsWith("(")) {
+		clickNumber('0');
 	}
+	
 	MainWindow.currentEquation.setText(MainWindow.currentEquation.getText() + MainWindow.inputText.getText() + ")");
 	MainWindow.inputText.setText("");
 	closeBracket[closeBracketCount] = eqCount;
@@ -297,6 +318,17 @@ static void clickTrig(String function) {
 	trigCount++;
 	MainWindow.currentEquation.setText(MainWindow.currentEquation.getText() + function);
 	clickOpenBracket();
+}
+static void switchAngleType() {
+	if (angleType=='d') {
+		angleType='r';
+		MainWindow.btnRad.setBackground(new Color(51, 153, 204));
+		MainWindow.btnDeg.setBackground(new Color(153, 153, 153));
+	} else {
+		angleType='d';
+		MainWindow.btnDeg.setBackground(new Color(51, 153, 204));
+		MainWindow.btnRad.setBackground(new Color(153, 153, 153));
+	}
 }
 static void recallPi() {
 	if (MainWindow.inputText.getText().isEmpty()==false) {

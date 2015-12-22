@@ -7,36 +7,20 @@ import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 import javax.swing.JTextField;
 import javax.swing.JButton;
-import javax.swing.JSpinner;
-import javax.swing.SpinnerNumberModel;
-import javax.swing.JRadioButton;
-import javax.swing.ButtonGroup;
 
 import java.awt.Font;
 import java.awt.Color;
 import java.awt.SystemColor;
 import java.awt.Insets;
 
-import javax.swing.event.ChangeListener;
-import javax.swing.text.NumberFormatter;
-import javax.swing.event.ChangeEvent;
-
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
-import java.text.NumberFormat;
-import java.awt.Component;
-import java.awt.event.FocusAdapter;
-import java.awt.event.FocusEvent;
-import org.eclipse.wb.swing.FocusTraversalOnArray;
 import javax.swing.SwingConstants;
 import javax.swing.JSeparator;
 import javax.swing.JFormattedTextField;
-import java.awt.Rectangle;
 import javax.swing.border.LineBorder;
-import java.awt.event.InputMethodListener;
-import java.awt.event.InputMethodEvent;
 
 
 public class MainWindow extends JFrame {
@@ -95,13 +79,9 @@ public class MainWindow extends JFrame {
 	static JButton trigAcos;
 	static JButton trigAtan;
 	
-	static JButton convDecToBase;
-	static JButton convBinToDec;
-	static JButton convHexToDec;
+	static JButton btnRad;
+	static JButton btnDeg;
 	
-	static ButtonGroup angleMode = new ButtonGroup();
-	
-	static ButtonGroup functionSelector = new ButtonGroup();
 	/**
 	 * Launch the application.
 	 */
@@ -126,7 +106,7 @@ public class MainWindow extends JFrame {
 		setBackground(SystemColor.control);
 		setResizable(false);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		setBounds(100, 50, 481, 356);
+		setBounds(100, 50, 481, 363);
 		contentPane = new JPanel();
 		contentPane.setBackground(Color.DARK_GRAY);
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
@@ -138,14 +118,14 @@ public class MainWindow extends JFrame {
 		
 		JSeparator vertSeparator = new JSeparator();
 		vertSeparator.setOrientation(SwingConstants.VERTICAL);
-		vertSeparator.setBounds(308, 25, 12, 29);
+		vertSeparator.setBounds(308, 31, 12, 29);
 		contentPane.add(vertSeparator);
 		finalOutput = new JTextField("0.0=0.0");
 		finalOutput.setHorizontalAlignment(SwingConstants.CENTER);
 		finalOutput.setBackground(Color.DARK_GRAY);
-		finalOutput.setForeground(Color.LIGHT_GRAY);
+		finalOutput.setForeground(new Color(255, 255, 255));
 		finalOutput.setBorder(javax.swing.BorderFactory.createEmptyBorder());
-		finalOutput.setFont(new Font("Helvetica", Font.PLAIN, 18));
+		finalOutput.setFont(new Font("Helvetica", Font.BOLD, 20));
 		finalOutput.setEditable(false);
 		finalOutput.setBounds(9, 6, 466, 20);
 		contentPane.add(finalOutput);
@@ -155,9 +135,9 @@ public class MainWindow extends JFrame {
 		currentEquation.setForeground(Color.WHITE);
 		currentEquation.setBorder(javax.swing.BorderFactory.createEmptyBorder());
 		currentEquation.setHorizontalAlignment(SwingConstants.RIGHT);
-		currentEquation.setFont(new Font("Helvetica", Font.BOLD, 20));
+		currentEquation.setFont(new Font("Helvetica", Font.PLAIN, 20));
 		currentEquation.setEditable(false);
-		currentEquation.setBounds(9, 28, 298, 25);
+		currentEquation.setBounds(9, 34, 298, 25);
 		contentPane.add(currentEquation);
 		
 		inputText = new JTextField();
@@ -195,7 +175,7 @@ public class MainWindow extends JFrame {
 			}
 		});
 		inputText.setFont(new Font("Helvetica", Font.PLAIN, 20));
-		inputText.setBounds(319, 28, 156, 25);
+		inputText.setBounds(319, 34, 156, 25);
 		contentPane.add(inputText);
 		
 		memContents = new JTextField();
@@ -207,7 +187,7 @@ public class MainWindow extends JFrame {
 		memContents.setBorder(javax.swing.BorderFactory.createEmptyBorder());
 		memContents.setFont(new Font("Helvetica", Font.ITALIC, 15));
 		memContents.setEditable(false);
-		memContents.setBounds(0, 54, 450, 30);
+		memContents.setBounds(0, 60, 450, 30);
 		contentPane.add(memContents);
 		memContents.setColumns(10);
 		/*
@@ -229,7 +209,7 @@ public class MainWindow extends JFrame {
 		memStore.setBackground(new Color(51, 51, 51));
 		memStore.setForeground(new Color(255, 255, 255));
 		memStore.setFont(new Font("Helvetica", Font.PLAIN, 18));
-		memStore.setBounds(360, 134, 61, 51);
+		memStore.setBounds(360, 140, 61, 51);
 		contentPane.add(memStore);
 		
 		memRecall = new JButton("Rec.");
@@ -244,7 +224,7 @@ public class MainWindow extends JFrame {
 		memRecall.setBackground(new Color(51, 51, 51));
 		memRecall.setForeground(new Color(255, 255, 255));
 		memRecall.setFont(new Font("Helvetica", Font.PLAIN, 18));
-		memRecall.setBounds(420, 134, 61, 51);
+		memRecall.setBounds(420, 140, 61, 51);
 		contentPane.add(memRecall);
 		
 		JButton memScrollDown = new JButton("v");
@@ -259,7 +239,7 @@ public class MainWindow extends JFrame {
 		memScrollDown.setBackground(new Color(51, 51, 51));
 		memScrollDown.setForeground(new Color(255, 255, 255));
 		memScrollDown.setFont(new Font("Helvetica", Font.PLAIN, 18));
-		memScrollDown.setBounds(420, 84, 61, 51);
+		memScrollDown.setBounds(360, 90, 61, 51);
 		contentPane.add(memScrollDown);
 		
 		JButton memScrollUp = new JButton("^");
@@ -274,7 +254,7 @@ public class MainWindow extends JFrame {
 		memScrollUp.setBackground(new Color(51, 51, 51));
 		memScrollUp.setForeground(new Color(255, 255, 255));
 		memScrollUp.setFont(new Font("Helvetica", Font.PLAIN, 18));
-		memScrollUp.setBounds(360, 84, 61, 51);
+		memScrollUp.setBounds(420, 90, 61, 51);
 		contentPane.add(memScrollUp);
 		
 		/*
@@ -292,7 +272,7 @@ public class MainWindow extends JFrame {
 		clearButton.setBackground(new Color(153, 153, 153));
 		clearButton.setForeground(Color.BLACK);
 		clearButton.setFont(new Font("Helvetica", Font.PLAIN, 18));
-		clearButton.setBounds(300, 84, 61, 51);
+		clearButton.setBounds(300, 90, 61, 51);
 		contentPane.add(clearButton);
 		
 		/*
@@ -310,7 +290,7 @@ public class MainWindow extends JFrame {
 		numNine.setBackground(new Color(204, 204, 204));
 		numNine.setForeground(Color.BLACK);
 		numNine.setFont(new Font("Helvetica", Font.PLAIN, 18));
-		numNine.setBounds(300, 134, 61, 51);
+		numNine.setBounds(300, 140, 61, 51);
 		contentPane.add(numNine);
 		
 		JButton numEight = new JButton("8");
@@ -325,7 +305,7 @@ public class MainWindow extends JFrame {
 		numEight.setBackground(new Color(204, 204, 204));
 		numEight.setForeground(Color.BLACK);
 		numEight.setFont(new Font("Helvetica", Font.PLAIN, 18));
-		numEight.setBounds(240, 134, 61, 51);
+		numEight.setBounds(240, 140, 61, 51);
 		contentPane.add(numEight);
 		
 		JButton numSeven = new JButton("7");
@@ -340,7 +320,7 @@ public class MainWindow extends JFrame {
 		numSeven.setBackground(new Color(204, 204, 204));
 		numSeven.setForeground(Color.BLACK);
 		numSeven.setFont(new Font("Helvetica", Font.PLAIN, 18));
-		numSeven.setBounds(180, 134, 61, 51);
+		numSeven.setBounds(180, 140, 61, 51);
 		contentPane.add(numSeven);
 		
 		JButton numSix = new JButton("6");
@@ -355,7 +335,7 @@ public class MainWindow extends JFrame {
 		numSix.setBackground(new Color(204, 204, 204));
 		numSix.setForeground(Color.BLACK);
 		numSix.setFont(new Font("Helvetica", Font.PLAIN, 18));
-		numSix.setBounds(300, 184, 61, 51);
+		numSix.setBounds(300, 190, 61, 51);
 		contentPane.add(numSix);
 		
 		JButton numFive = new JButton("5");
@@ -370,7 +350,7 @@ public class MainWindow extends JFrame {
 		numFive.setBackground(new Color(204, 204, 204));
 		numFive.setForeground(Color.BLACK);
 		numFive.setFont(new Font("Helvetica", Font.PLAIN, 18));
-		numFive.setBounds(240, 184, 61, 51);
+		numFive.setBounds(240, 190, 61, 51);
 		contentPane.add(numFive);
 		
 		JButton numFour = new JButton("4");
@@ -385,7 +365,7 @@ public class MainWindow extends JFrame {
 		numFour.setBackground(new Color(204, 204, 204));
 		numFour.setForeground(Color.BLACK);
 		numFour.setFont(new Font("Helvetica", Font.PLAIN, 18));
-		numFour.setBounds(180, 184, 61, 51);
+		numFour.setBounds(180, 190, 61, 51);
 		contentPane.add(numFour);
 		
 		JButton numThree = new JButton("3");
@@ -400,7 +380,7 @@ public class MainWindow extends JFrame {
 		numThree.setBackground(new Color(204, 204, 204));
 		numThree.setForeground(Color.BLACK);
 		numThree.setFont(new Font("Helvetica", Font.PLAIN, 18));
-		numThree.setBounds(300, 234, 61, 51);
+		numThree.setBounds(300, 240, 61, 51);
 		contentPane.add(numThree);
 		
 		JButton numTwo = new JButton("2");
@@ -415,7 +395,7 @@ public class MainWindow extends JFrame {
 		numTwo.setBackground(new Color(204, 204, 204));
 		numTwo.setForeground(Color.BLACK);
 		numTwo.setFont(new Font("Helvetica", Font.PLAIN, 18));
-		numTwo.setBounds(240, 234, 61, 51);
+		numTwo.setBounds(240, 240, 61, 51);
 		contentPane.add(numTwo);
 		
 		JButton numOne = new JButton("1");
@@ -430,7 +410,7 @@ public class MainWindow extends JFrame {
 		numOne.setBackground(new Color(204, 204, 204));
 		numOne.setForeground(Color.BLACK);
 		numOne.setFont(new Font("Helvetica", Font.PLAIN, 18));
-		numOne.setBounds(180, 234, 61, 51);
+		numOne.setBounds(180, 240, 61, 51);
 		contentPane.add(numOne);
 		
 		JButton numZero = new JButton("0");
@@ -445,7 +425,7 @@ public class MainWindow extends JFrame {
 		numZero.setBackground(new Color(204, 204, 204));
 		numZero.setForeground(Color.BLACK);
 		numZero.setFont(new Font("Helvetica", Font.PLAIN, 18));
-		numZero.setBounds(180, 284, 121, 51);
+		numZero.setBounds(180, 290, 121, 51);
 		contentPane.add(numZero);
 		
 		JButton numFullStop = new JButton(".");
@@ -460,7 +440,7 @@ public class MainWindow extends JFrame {
 		numFullStop.setBackground(new Color(204, 204, 204));
 		numFullStop.setForeground(Color.BLACK);
 		numFullStop.setFont(new Font("Helvetica", Font.PLAIN, 18));
-		numFullStop.setBounds(300, 284, 61, 51);
+		numFullStop.setBounds(300, 290, 61, 51);
 		contentPane.add(numFullStop);
 		
 		/*
@@ -475,10 +455,10 @@ public class MainWindow extends JFrame {
 			}
 		});
 		opMinus.setMargin(new Insets(0, 0, 0, 0));
-		opMinus.setBackground(new Color(153, 0, 0));
+		opMinus.setBackground(new Color(51, 153, 204));
 		opMinus.setForeground(Color.BLACK);
 		opMinus.setFont(new Font("Helvetica", Font.PLAIN, 18));
-		opMinus.setBounds(360, 184, 61, 51);
+		opMinus.setBounds(360, 190, 61, 51);
 		contentPane.add(opMinus);
 		
 		JButton opPlus = new JButton("+");
@@ -490,10 +470,10 @@ public class MainWindow extends JFrame {
 			}
 		});
 		opPlus.setMargin(new Insets(0, 0, 0, 0));
-		opPlus.setBackground(new Color(153, 0, 0));
+		opPlus.setBackground(new Color(51, 153, 204));
 		opPlus.setForeground(Color.BLACK);
 		opPlus.setFont(new Font("Helvetica", Font.PLAIN, 18));
-		opPlus.setBounds(360, 234, 61, 51);
+		opPlus.setBounds(360, 240, 61, 51);
 		contentPane.add(opPlus);
 		
 		JButton opDivide = new JButton("/");
@@ -505,10 +485,10 @@ public class MainWindow extends JFrame {
 			}
 		});
 		opDivide.setMargin(new Insets(0, 0, 0, 0));
-		opDivide.setBackground(new Color(153, 0, 0));
+		opDivide.setBackground(new Color(51, 153, 204));
 		opDivide.setForeground(Color.BLACK);
 		opDivide.setFont(new Font("Helvetica", Font.PLAIN, 18));
-		opDivide.setBounds(420, 184, 61, 51);
+		opDivide.setBounds(420, 190, 61, 51);
 		contentPane.add(opDivide);
 		
 		JButton opMultiply = new JButton("*");
@@ -520,10 +500,10 @@ public class MainWindow extends JFrame {
 			}
 		});
 		opMultiply.setMargin(new Insets(0, 0, 0, 0));
-		opMultiply.setBackground(new Color(153, 0, 0));
+		opMultiply.setBackground(new Color(51, 153, 204));
 		opMultiply.setForeground(Color.BLACK);
 		opMultiply.setFont(new Font("Helvetica", Font.PLAIN, 18));
-		opMultiply.setBounds(420, 234, 61, 51);
+		opMultiply.setBounds(420, 240, 61, 51);
 		contentPane.add(opMultiply);
 		
 		JButton opEquals = new JButton("=");
@@ -535,10 +515,10 @@ public class MainWindow extends JFrame {
 			}
 		});
 		opEquals.setMargin(new Insets(0, 0, 0, 0));
-		opEquals.setBackground(new Color(153, 0, 0));
+		opEquals.setBackground(new Color(51, 153, 204));
 		opEquals.setForeground(Color.BLACK);
 		opEquals.setFont(new Font("Helvetica", Font.PLAIN, 18));
-		opEquals.setBounds(360, 284, 121, 51);
+		opEquals.setBounds(360, 290, 121, 51);
 		contentPane.add(opEquals);
 		
 		JButton opSignChange = new JButton("+/-");
@@ -553,7 +533,7 @@ public class MainWindow extends JFrame {
 		opSignChange.setBackground(new Color(153, 153, 153));
 		opSignChange.setForeground(Color.BLACK);
 		opSignChange.setFont(new Font("Helvetica", Font.PLAIN, 18));
-		opSignChange.setBounds(180, 84, 61, 51);
+		opSignChange.setBounds(180, 90, 61, 51);
 		contentPane.add(opSignChange);
 		
 		JButton opSqrt = new JButton("\u221A");
@@ -568,7 +548,7 @@ public class MainWindow extends JFrame {
 		opSqrt.setBackground(new Color(153, 153, 153));
 		opSqrt.setForeground(Color.BLACK);
 		opSqrt.setFont(new Font("Helvetica", Font.PLAIN, 18));
-		opSqrt.setBounds(120, 134, 61, 51);
+		opSqrt.setBounds(120, 140, 61, 51);
 		contentPane.add(opSqrt);
 		
 		/*
@@ -586,7 +566,7 @@ public class MainWindow extends JFrame {
 		trigSin.setBackground(new Color(153, 153, 153));
 		trigSin.setForeground(Color.BLACK);
 		trigSin.setFont(new Font("Helvetica", Font.PLAIN, 18));
-		trigSin.setBounds(120, 184, 61, 51);
+		trigSin.setBounds(120, 190, 61, 51);
 		contentPane.add(trigSin);
 		
 		JButton trigCos = new JButton("Cos");
@@ -601,7 +581,7 @@ public class MainWindow extends JFrame {
 		trigCos.setBackground(new Color(153, 153, 153));
 		trigCos.setForeground(Color.BLACK);
 		trigCos.setFont(new Font("Helvetica", Font.PLAIN, 18));
-		trigCos.setBounds(120, 234, 61, 51);
+		trigCos.setBounds(120, 240, 61, 51);
 		contentPane.add(trigCos);
 		
 		JButton trigTan = new JButton("Tan");
@@ -616,7 +596,7 @@ public class MainWindow extends JFrame {
 		trigTan.setBackground(new Color(153, 153, 153));
 		trigTan.setForeground(Color.BLACK);
 		trigTan.setFont(new Font("Helvetica", Font.PLAIN, 18));
-		trigTan.setBounds(120, 284, 61, 51);
+		trigTan.setBounds(120, 290, 61, 51);
 		contentPane.add(trigTan);
 		
 		JButton trigAsin = new JButton("Asin");
@@ -631,7 +611,7 @@ public class MainWindow extends JFrame {
 		trigAsin.setBackground(new Color(153, 153, 153));
 		trigAsin.setForeground(Color.BLACK);
 		trigAsin.setFont(new Font("Helvetica", Font.PLAIN, 18));
-		trigAsin.setBounds(60, 184, 61, 51);
+		trigAsin.setBounds(60, 190, 61, 51);
 		contentPane.add(trigAsin);
 		
 		JButton trigAcos = new JButton("Acos");
@@ -646,7 +626,7 @@ public class MainWindow extends JFrame {
 		trigAcos.setBackground(new Color(153, 153, 153));
 		trigAcos.setForeground(Color.BLACK);
 		trigAcos.setFont(new Font("Helvetica", Font.PLAIN, 18));
-		trigAcos.setBounds(60, 234, 61, 51);
+		trigAcos.setBounds(60, 240, 61, 51);
 		contentPane.add(trigAcos);
 		
 		JButton trigAtan = new JButton("Atan");
@@ -661,7 +641,7 @@ public class MainWindow extends JFrame {
 		trigAtan.setBackground(new Color(153, 153, 153));
 		trigAtan.setForeground(Color.BLACK);
 		trigAtan.setFont(new Font("Helvetica", Font.PLAIN, 18));
-		trigAtan.setBounds(60, 284, 61, 51);
+		trigAtan.setBounds(60, 290, 61, 51);
 		contentPane.add(trigAtan);
 		
 		/*
@@ -679,7 +659,7 @@ public class MainWindow extends JFrame {
 		numPi.setBackground(new Color(153, 153, 153));
 		numPi.setForeground(Color.BLACK);
 		numPi.setFont(new Font("Helvetica", Font.PLAIN, 18));
-		numPi.setBounds(0, 184, 61, 51);
+		numPi.setBounds(0, 190, 61, 51);
 		contentPane.add(numPi);
 		
 		/*
@@ -697,7 +677,7 @@ public class MainWindow extends JFrame {
 		opOpenBracket.setBackground(new Color(153, 153, 153));
 		opOpenBracket.setForeground(Color.BLACK);
 		opOpenBracket.setFont(new Font("Helvetica", Font.PLAIN, 18));
-		opOpenBracket.setBounds(60, 84, 61, 51);
+		opOpenBracket.setBounds(60, 90, 61, 51);
 		contentPane.add(opOpenBracket);
 		
 		JButton opCloseBracket = new JButton(")");
@@ -712,7 +692,7 @@ public class MainWindow extends JFrame {
 		opCloseBracket.setBackground(new Color(153, 153, 153));
 		opCloseBracket.setForeground(Color.BLACK);
 		opCloseBracket.setFont(new Font("Helvetica", Font.PLAIN, 18));
-		opCloseBracket.setBounds(120, 84, 61, 51);
+		opCloseBracket.setBounds(120, 90, 61, 51);
 		contentPane.add(opCloseBracket);
 		
 		openBracketCount = new JTextField();
@@ -722,17 +702,12 @@ public class MainWindow extends JFrame {
 		openBracketCount.setFont(new Font("Helvetica", Font.PLAIN, 18));
 		openBracketCount.setEditable(false);
 		openBracketCount.setText("( = 0");
-		openBracketCount.setBounds(0, 84, 61, 51);
+		openBracketCount.setBounds(0, 90, 61, 51);
 		contentPane.add(openBracketCount);
 		openBracketCount.setColumns(10);
+
 		
-		/*
-		 * Radio buttons
-		 */
 		
-		angleMode = new ButtonGroup();
-		
-		functionSelector = new ButtonGroup();
 		
 		JButton exponentButton = new JButton("^");
 		exponentButton.setOpaque(true);
@@ -746,11 +721,11 @@ public class MainWindow extends JFrame {
 		exponentButton.setForeground(Color.BLACK);
 		exponentButton.setFont(new Font("Helvetica", Font.PLAIN, 18));
 		exponentButton.setBackground(new Color(153, 153, 153));
-		exponentButton.setBounds(60, 134, 61, 51);
+		exponentButton.setBounds(60, 140, 61, 51);
 		contentPane.add(exponentButton);
 		
 		JSeparator separator = new JSeparator();
-		separator.setBounds(6, 21, 469, 12);
+		separator.setBounds(6, 27, 469, 12);
 		contentPane.add(separator);
 		
 		memLocation = new JFormattedTextField();
@@ -760,27 +735,37 @@ public class MainWindow extends JFrame {
 		memLocation.setForeground(Color.WHITE);
 		memLocation.setBorder(javax.swing.BorderFactory.createEmptyBorder());
 		memLocation.setText("1");
-		memLocation.setBounds(450, 54, 31, 30);
+		memLocation.setBounds(450, 60, 31, 30);
 		contentPane.add(memLocation);
 		
-		JButton btnDeg = new JButton("Deg");
+		btnDeg = new JButton("Deg");
+		btnDeg.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				calculator.switchAngleType();
+			}
+		});
 		btnDeg.setOpaque(true);
 		btnDeg.setMargin(new Insets(0, 0, 0, 0));
 		btnDeg.setForeground(Color.BLACK);
 		btnDeg.setFont(new Font("Helvetica", Font.PLAIN, 18));
 		btnDeg.setBorder(new LineBorder(new Color(0, 0, 0)));
 		btnDeg.setBackground(new Color(153, 153, 153));
-		btnDeg.setBounds(0, 134, 61, 26);
+		btnDeg.setBounds(0, 140, 61, 26);
 		contentPane.add(btnDeg);
 		
-		JButton btnRad = new JButton("Rad");
+		btnRad = new JButton("Rad");
+		btnRad.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				calculator.switchAngleType();
+			}
+		});
 		btnRad.setOpaque(true);
 		btnRad.setMargin(new Insets(0, 0, 0, 0));
 		btnRad.setForeground(Color.BLACK);
 		btnRad.setFont(new Font("Helvetica", Font.PLAIN, 18));
 		btnRad.setBorder(new LineBorder(new Color(0, 0, 0)));
 		btnRad.setBackground(new Color(51, 153, 204));
-		btnRad.setBounds(0, 159, 61, 26);
+		btnRad.setBounds(0, 165, 61, 26);
 		contentPane.add(btnRad);
 	}
 }
