@@ -111,10 +111,10 @@ static void clickEquals() {
 }
 static void calculate() {
 	// Check to make sure that there is, in fact, something to calculate
-	if (operCount==1 && funcCount==0 && bracket[0][1]!=0) {
+	if (operCount==1 && funcCount==0 && bracket[0][1]==0) {
 		finalResult=Double.parseDouble(MainWindow.inputText.getText());
 		return;
-	} else if (operCount==1 && funcCount==0 && bracket[0][1]==0) {
+	} else if (operCount==1 && funcCount==0 && bracket[0][1]!=0) {
 		finalResult=equation[1];
 		return;
 	}
