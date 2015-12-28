@@ -113,6 +113,7 @@ static void clickBackspace() {
 		operator[operCount]=' ';
 		MainWindow.currentEquation.setText(
 				MainWindow.currentEquation.getText().substring(0, MainWindow.currentEquation.getText().length() - 1));
+		eqCount--;
 	} else {
 		throw new RuntimeException("Failed to backspace");
 	}
@@ -122,7 +123,7 @@ static void clickBackspace() {
 					))
 			) 
 	{
-		eqCount--;
+		
 		if(equation[eqCount] == (long) equation[eqCount]) {
 			MainWindow.inputText.setText(String.valueOf((long)equation[eqCount]));
 		} else {
