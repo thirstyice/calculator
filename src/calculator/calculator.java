@@ -59,7 +59,11 @@ static void clickBackspace() {
 	} else if (MainWindow.currentEquation.getText().isEmpty()==true) {
 		return;
 	} else if (MainWindow.currentEquation.getText().endsWith(")")) {
-			MainWindow.currentEquation.setText(MainWindow.currentEquation.getText().substring(0, MainWindow.currentEquation.getText().length() - 1));
+			MainWindow.currentEquation.setText(
+					MainWindow.currentEquation.getText().substring(
+							0, MainWindow.currentEquation.getText().length() - 1
+							)
+					);
 			
 			int position = totalBracketPairs-1; 
 			while (bracket[position][1]!=0) {
@@ -101,11 +105,19 @@ static void clickBackspace() {
 				functionLocation[funcCount] = 0;
 				functionType[funcCount] = 0;
 			}
-	} else if (operators.contains(String.valueOf(MainWindow.currentEquation.getText().charAt(MainWindow.currentEquation.getText().length() - 1)))) {
+	} else if (operators.contains(String.valueOf(
+			MainWindow.currentEquation.getText().charAt(
+					MainWindow.currentEquation.getText().length() - 1
+					)
+			))) 
+	{
 		operCount--;
 		operator[operCount]=' ';
 		MainWindow.currentEquation.setText(
-				MainWindow.currentEquation.getText().substring(0, MainWindow.currentEquation.getText().length() - 1));
+				MainWindow.currentEquation.getText().substring(
+						0, MainWindow.currentEquation.getText().length() - 1
+						)
+				);
 		eqCount--;
 	} else {
 		throw new RuntimeException("Failed to backspace");

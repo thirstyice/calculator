@@ -21,6 +21,8 @@ import javax.swing.SwingConstants;
 import javax.swing.JSeparator;
 import javax.swing.JFormattedTextField;
 import javax.swing.border.LineBorder;
+import org.eclipse.wb.swing.FocusTraversalOnArray;
+import java.awt.Component;
 
 
 public class MainWindow extends JFrame {
@@ -782,5 +784,7 @@ public class MainWindow extends JFrame {
 		btnBackspace.setBackground(new Color(204, 0, 0));
 		btnBackspace.setBounds(300, 90, 61, 51);
 		contentPane.add(btnBackspace);
+		
+		setFocusTraversalPolicy(new FocusTraversalOnArray(new Component[]{inputText, numOne, numTwo, numThree, numFour, numFive, numSix, numSeven, numEight, numNine, numZero, numFullStop, clearButton, btnBackspace, opMinus, opPlus, opDivide, opMultiply, opEquals, memScrollDown, memScrollUp, memStore, memRecall, opOpenBracket, opCloseBracket, opSignChange, exponentButton, opSqrt, btnRad, numPi, trigAsin, trigSin, trigAcos, trigCos, trigAtan, trigTan, memLocation, finalOutput, currentEquation, memContents, openBracketCount }));
 	}
 }
