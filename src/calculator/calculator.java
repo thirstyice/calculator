@@ -83,11 +83,12 @@ static void clickBackspace() {
 			updateBracketCount();
 			
 			// If open bracket was placed by a function, backspace that too
-			if (operators.contains(String.valueOf(
-					MainWindow.currentEquation.getText().charAt(
-							MainWindow.currentEquation.getText().length() - 1
-							)
-					))==false) {
+			if (MainWindow.currentEquation.getText().isEmpty()==false && 
+					operators.contains(String.valueOf(
+							MainWindow.currentEquation.getText().charAt(
+									MainWindow.currentEquation.getText().length() - 1
+									)
+							))==false) {
 				// Find the most recently placed function
 				int functionLocation[] = new int[2];
 				for (int function = 0; function>6; function++) {
