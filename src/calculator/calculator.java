@@ -120,6 +120,9 @@ static void clickFullStop() {
  * Operator functions
  */
 static void clickOperator(char op) {
+	if (operators.contains(String.valueOf(op))==false) {
+		throw new RuntimeException("Unrecognised Operator");
+	}
 	if ( MainWindow.inputText.getText().isEmpty()==true) {
 		if (MainWindow.finalOutput.getText().isEmpty() == false && MainWindow.currentEquation.getText().isEmpty() == true) {
 			equation[eqCount] = finalResult;
@@ -188,12 +191,11 @@ static void calculate() {
 		// Because zero-indexed arrays
 		
 		// Do the calculations
-		calculateForOperator('√', bracket[totalBracketPairs]);
-		calculateForOperator('^', bracket[totalBracketPairs]);
-		calculateForOperator('/', bracket[totalBracketPairs]);
-		calculateForOperator('*', bracket[totalBracketPairs]);
-		calculateForOperator('+', bracket[totalBracketPairs]);
-		calculateForOperator('-', bracket[totalBracketPairs]);
+		char operatorList[]=operators.toCharArray();
+		for (int i=0; i<operators.length(); i++) {
+			calculateForOperator(operatorList[i], bracket[totalBracketPairs]);
+		}
+		
 		calculateTrig(bracket[totalBracketPairs][0]);
 		
 		// Done with this set of brackets
@@ -229,6 +231,7 @@ static void calculateForOperator(char op, int[] bracketPair) {
 			break;
 			case '-': equation[index]=equation[index] - equation[index+1];
 			break;
+			default: throw new RuntimeException("Tried to calculate invalid operator");
 			}
 			for (int counter = index; counter<eqCount; counter++) {
 				equation[counter+1]=equation[counter+2];
