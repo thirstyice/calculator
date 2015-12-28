@@ -62,6 +62,9 @@ static void clickBackspace() {
 			int position = totalBracketPairs-1; 
 			while (bracket[position][1]!=0) {
 				position--;
+				if (position<0) {
+					break;
+				}
 			}
 			position++;
 			bracket[position][1] = 0;
@@ -78,6 +81,33 @@ static void clickBackspace() {
 			bracket[totalBracketPairs][0] = 0;
 			netBracketCount--;
 			updateBracketCount();
+			
+			// If open bracket was placed by a function, backspace that too
+			if (operators.contains(String.valueOf(
+					MainWindow.currentEquation.getText().charAt(
+							MainWindow.currentEquation.getText().length() - 1
+							)
+					))==false) {
+				// Find the most recently placed function
+				int functionLocation[] = new int[2];
+				for (int function = 0; function>6; function++) {
+					for (int location=0; func[function][location]<0; location++) {
+						if (func[function][location]>func[functionLocation[0]][functionLocation[1]]) {
+							functionLocation[0]=function;
+							functionLocation[1]=location;
+						}
+					}
+				}
+				// Backspace it
+				func[functionLocation[0]][functionLocation[1]] = 0;
+				funcCount--;
+				MainWindow.currentEquation.setText(
+						MainWindow.currentEquation.getText().substring(
+								0, MainWindow.currentEquation.getText().length() -
+								convertFunctionNumberToName(functionLocation[0]).length()
+								)
+						);
+			}
 	} else if (operators.contains(String.valueOf(MainWindow.currentEquation.getText().charAt(MainWindow.currentEquation.getText().length() - 1)))) {
 		operCount--;
 		operator[operCount]=' ';
@@ -86,7 +116,12 @@ static void clickBackspace() {
 	} else {
 		throw new RuntimeException("Failed to backspace");
 	}
-	if (Character.isDigit(MainWindow.currentEquation.getText().charAt(MainWindow.currentEquation.getText().length() - 1))) {
+	if (MainWindow.currentEquation.getText().isEmpty()==false && 
+			Character.isDigit(MainWindow.currentEquation.getText().charAt(
+					MainWindow.currentEquation.getText().length() - 1
+					))
+			) 
+	{
 		eqCount--;
 		if(equation[eqCount] == (long) equation[eqCount]) {
 			MainWindow.inputText.setText(String.valueOf((long)equation[eqCount]));
@@ -336,26 +371,35 @@ static void decrementMemoryLocation() {
 	displayMemoryContents();
 }
 /*
- * Trig functions
+ * Function functions
  */
-static void clickTrig(String function) {
-	switch (function) {
-		case "sin": func[0][funcCount] = eqCount;
-			break;
-		case "cos": func[1][funcCount] = eqCount;
-			break;
-		case "tan": func[2][funcCount] = eqCount;
-			break;
-		case "asin":func[3][funcCount] = eqCount;
-			break;
-		case "acos":func[4][funcCount] = eqCount;
-			break;
-		case "atan":func[5][funcCount] = eqCount;
-			break;
-	}
+static void clickFunction(String function) {
+	func[convertFunctionNameToNumber(function)][funcCount] = eqCount;
 	funcCount++;
 	MainWindow.currentEquation.setText(MainWindow.currentEquation.getText() + function);
 	clickOpenBracket();
+}
+static String convertFunctionNumberToName(int number) {
+	switch (number) {
+	case 0: return "sin";
+	case 1: return "cos";
+	case 2: return "tan";
+	case 3: return "asin";
+	case 4: return "acos";
+	case 5: return "atan";
+	default: return "INVALID";
+	}
+}
+static int convertFunctionNameToNumber(String name) {
+	switch (name) {
+	case "sin": return 0;
+	case "cos": return 1;
+	case "tan": return 2;
+	case "asin":return 3;
+	case "acos":return 4;
+	case "atan":return 5;
+	default: return -1;
+	}
 }
 static void switchAngleType() {
 	if (angleType=='d') {

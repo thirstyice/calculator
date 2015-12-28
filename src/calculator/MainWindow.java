@@ -559,7 +559,7 @@ public class MainWindow extends JFrame {
 		trigSin.setBorder(new LineBorder(new Color(0, 0, 0)));;
 		trigSin.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-				calculator.clickTrig("sin");
+				calculator.clickFunction("sin");
 			}
 		});
 		trigSin.setMargin(new Insets(0, 0, 0, 0));
@@ -574,7 +574,7 @@ public class MainWindow extends JFrame {
 		trigCos.setBorder(new LineBorder(new Color(0, 0, 0)));;
 		trigCos.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				calculator.clickTrig("cos");
+				calculator.clickFunction("cos");
 			}
 		});
 		trigCos.setMargin(new Insets(0, 0, 0, 0));
@@ -589,7 +589,7 @@ public class MainWindow extends JFrame {
 		trigTan.setBorder(new LineBorder(new Color(0, 0, 0)));;
 		trigTan.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				calculator.clickTrig("tan");
+				calculator.clickFunction("tan");
 			}
 		});
 		trigTan.setMargin(new Insets(0, 0, 0, 0));
@@ -604,7 +604,7 @@ public class MainWindow extends JFrame {
 		trigAsin.setBorder(new LineBorder(new Color(0, 0, 0)));;
 		trigAsin.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-				calculator.clickTrig("asin");
+				calculator.clickFunction("asin");
 			}
 		});
 		trigAsin.setMargin(new Insets(0, 0, 0, 0));
@@ -619,7 +619,7 @@ public class MainWindow extends JFrame {
 		trigAcos.setBorder(new LineBorder(new Color(0, 0, 0)));;
 		trigAcos.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				calculator.clickTrig("acos");
+				calculator.clickFunction("acos");
 			}
 		});
 		trigAcos.setMargin(new Insets(0, 0, 0, 0));
@@ -634,7 +634,7 @@ public class MainWindow extends JFrame {
 		trigAtan.setBorder(new LineBorder(new Color(0, 0, 0)));;
 		trigAtan.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				calculator.clickTrig("atan");
+				calculator.clickFunction("atan");
 			}
 		});
 		trigAtan.setMargin(new Insets(0, 0, 0, 0));
