@@ -152,6 +152,51 @@ static void clickFullStop() {
 		MainWindow.inputText.setText(MainWindow.inputText.getText() + ".");
 	}
 }
+static boolean getInputFromKey(char keyChar) {
+	// Note: enter key is handled separately in MainWindow
+	
+	if (Character.isDigit(keyChar)==true) {
+		clickNumber(keyChar);
+		return true;
+	}
+	if (operators.contains(String.valueOf(keyChar))) {
+		clickOperator(keyChar);
+		return true;
+	}
+	if (keyChar=='v'||keyChar=='V') {
+		clickOperator('√');
+		return true;
+	}
+	if (keyChar=='\b') {
+		clickBackspace();
+		return true;
+	}
+	if (keyChar=='.') {
+		clickFullStop();
+		return true;
+	}
+	if (keyChar=='(') {
+		clickOpenBracket();
+		return true;
+	}
+	if (keyChar==')') {
+		clickCloseBracket();
+		return true;
+	}
+	if (keyChar=='π'||keyChar=='p'||keyChar=='P') {
+		recallPi();
+		return true;
+	}
+	if (keyChar=='s'||keyChar=='S') {
+		storeNumberToMemory(Integer.valueOf(MainWindow.memLocation.getText()));
+		return true;
+	}
+	if (keyChar=='r'||keyChar=='R') {
+		recallNumberFromMemory(Integer.valueOf(MainWindow.memLocation.getText()));
+		return true;
+	}
+	return false;
+}
 /*
  * Operator functions
  */

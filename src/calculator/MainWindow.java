@@ -149,24 +149,8 @@ public class MainWindow extends JFrame {
 		inputText.addKeyListener(new KeyAdapter() {
 			public void keyTyped(KeyEvent e) {
 				char c = e.getKeyChar();
-				if ( c=='/'||c=='*'||c=='+') {
-					calculator.clickOperator(c);
+				if (calculator.getInputFromKey(c)) {
 					e.consume();
-				} else if (c=='-') {
-					if (inputText.getText().isEmpty()==false) {
-						calculator.clickOperator(c);
-						e.consume();
-					}
-				} else if (c=='(') {
-					calculator.clickOpenBracket();
-					e.consume();
-				} else if (c==')') {
-					calculator.clickCloseBracket();
-					e.consume();
-				} else if (c=='.') {
-					if (inputText.getText().contains(".")) {
-						e.consume();
-					}
 				}
 			}
 		});
@@ -731,6 +715,17 @@ public class MainWindow extends JFrame {
 		contentPane.add(separator);
 		
 		memLocation = new JFormattedTextField();
+		memLocation.addKeyListener(new KeyAdapter() {
+			@Override
+			public void keyTyped(KeyEvent e) {
+				char c = e.getKeyChar();
+				if (Character.isDigit(c)) {
+					memLocation.setText(String.valueOf(c));
+					calculator.displayMemoryContents();
+					e.consume();
+				}
+			}
+		});
 		memLocation.setEditable(false);
 		memLocation.setBackground(Color.BLACK);
 		memLocation.setHorizontalAlignment(SwingConstants.CENTER);
@@ -785,6 +780,6 @@ public class MainWindow extends JFrame {
 		btnBackspace.setBounds(300, 90, 61, 51);
 		contentPane.add(btnBackspace);
 		
-		setFocusTraversalPolicy(new FocusTraversalOnArray(new Component[]{inputText, numOne, numTwo, numThree, numFour, numFive, numSix, numSeven, numEight, numNine, numZero, numFullStop, clearButton, btnBackspace, opMinus, opPlus, opDivide, opMultiply, opEquals, memScrollDown, memScrollUp, memStore, memRecall, opOpenBracket, opCloseBracket, opSignChange, exponentButton, opSqrt, btnRad, numPi, trigAsin, trigSin, trigAcos, trigCos, trigAtan, trigTan, memLocation, finalOutput, currentEquation, memContents, openBracketCount }));
+		setFocusTraversalPolicy(new FocusTraversalOnArray(new Component[]{inputText, memLocation }));
 	}
 }
