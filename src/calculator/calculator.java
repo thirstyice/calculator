@@ -95,7 +95,6 @@ static void clickBackspace() {
 									MainWindow.currentEquation.getText().length() - 1
 									)
 							))==false) {
-				funcCount--;
 				MainWindow.currentEquation.setText(
 						MainWindow.currentEquation.getText().substring(
 								0, MainWindow.currentEquation.getText().length() -
@@ -104,6 +103,7 @@ static void clickBackspace() {
 						);
 				functionLocation[funcCount] = 0;
 				functionType[funcCount] = 0;
+				funcCount--;
 			}
 	} else if (operators.contains(String.valueOf(
 			MainWindow.currentEquation.getText().charAt(
@@ -268,6 +268,7 @@ static void calculate() {
 	
 	// Aaaaand, Begin!
 	while (totalBracketPairs>0) {
+		
 		totalBracketPairs--;
 		// Because zero-indexed arrays
 		
@@ -326,9 +327,9 @@ static void calculateForOperator(char op, int[] bracketPair) {
 	}
 }
 static void calculateTrig(int place) {
-	for (int counter=funcCount; counter>=0; counter--) {
+	for (int counter=funcCount; counter>0; counter--) {
 		if (functionLocation[counter]==place) {
-			if (angleType=='d' && functionType[counter]<6) {
+			if (angleType=='d' && functionType[counter]<=6) {
 				equation[place]=equation[place]*(Math.PI/180);
 			}
 			switch (functionType[counter]) {
@@ -429,9 +430,9 @@ static void clickFunction(String function) {
 	if (MainWindow.inputText.getText().isEmpty()==false||MainWindow.currentEquation.getText().endsWith(")")==true) {
 		clickOperator('*');
 	}
+	funcCount++;
 	functionLocation[funcCount] = eqCount;
 	functionType[funcCount] = convertFunctionNameToNumber(function);
-	funcCount++;
 	MainWindow.currentEquation.setText(MainWindow.currentEquation.getText() + function);
 	clickOpenBracket();
 }
