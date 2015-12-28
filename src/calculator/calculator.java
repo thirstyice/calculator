@@ -374,6 +374,9 @@ static void decrementMemoryLocation() {
  * Function functions
  */
 static void clickFunction(String function) {
+	if (MainWindow.inputText.getText().isEmpty()==false||MainWindow.currentEquation.getText().endsWith(")")==true) {
+		clickOperator('*');
+	}
 	func[convertFunctionNameToNumber(function)][funcCount] = eqCount;
 	funcCount++;
 	MainWindow.currentEquation.setText(MainWindow.currentEquation.getText() + function);
