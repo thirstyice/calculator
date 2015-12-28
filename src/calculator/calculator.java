@@ -25,7 +25,8 @@ static double memory[] = new double[10];
 static double equation[] = new double[100];
 static double finalResult;
 static int bracket[][] = new int[100][2];
-static int func[][] = new int[6][100];
+static int functionType[] = new int[100];
+static int functionLocation[] = new int[100];
 static int funcCount = 0;
 static int netBracketCount = 0;
 static int totalBracketPairs = 0;
@@ -40,7 +41,8 @@ static void clearDisplay() {
 	if (MainWindow.inputText.getText().isEmpty()==true) {
 		MainWindow.currentEquation.setText("");
 		MainWindow.openBracketCount.setText("( = 0");
-		func= new int[3][100];
+		functionType = new int[100];
+		functionLocation = new int[100];
 		eqCount=1;
 		operCount=1;
 		funcCount = 0;
@@ -89,25 +91,15 @@ static void clickBackspace() {
 									MainWindow.currentEquation.getText().length() - 1
 									)
 							))==false) {
-				// Find the most recently placed function
-				int functionLocation[] = new int[2];
-				for (int function = 0; function>6; function++) {
-					for (int location=0; func[function][location]<0; location++) {
-						if (func[function][location]>func[functionLocation[0]][functionLocation[1]]) {
-							functionLocation[0]=function;
-							functionLocation[1]=location;
-						}
-					}
-				}
-				// Backspace it
-				func[functionLocation[0]][functionLocation[1]] = 0;
 				funcCount--;
 				MainWindow.currentEquation.setText(
 						MainWindow.currentEquation.getText().substring(
 								0, MainWindow.currentEquation.getText().length() -
-								convertFunctionNumberToName(functionLocation[0]).length()
+								convertFunctionNumberToName(functionType[funcCount]).length()
 								)
 						);
+				functionLocation[funcCount] = 0;
+				functionType[funcCount] = 0;
 			}
 	} else if (operators.contains(String.valueOf(MainWindow.currentEquation.getText().charAt(MainWindow.currentEquation.getText().length() - 1)))) {
 		operCount--;
@@ -277,29 +269,30 @@ static void calculateForOperator(char op, int[] bracketPair) {
 	}
 }
 static void calculateTrig(int place) {
-	for (int function=0; function<6; function++) {
-		for (int counter = 0; counter<funcCount;counter++) {
-			if (func[function][counter]==place) {
-				if (angleType=='d' && function<6) {
-					equation[place]=equation[place]*(Math.PI/180);
-				}
-				switch (function) {
-					case 0: equation[place]=Math.sin(equation[place]);
-							break;
-					case 1: equation[place]=Math.cos(equation[place]);
-							break;
-					case 2: equation[place]=Math.tan(equation[place]);
-							break;
-					case 3: equation[place]=Math.asin(equation[place]);
-							break;
-					case 4: equation[place]=Math.acos(equation[place]);
-							break;
-					case 5: equation[place]=Math.atan(equation[place]);
-							break;
-				}
-				finalResult = equation[place];
-				funcCount--;
+	for (int counter=funcCount; counter>=0; counter--) {
+		if (functionLocation[counter]==place) {
+			if (angleType=='d' && functionType[counter]<6) {
+				equation[place]=equation[place]*(Math.PI/180);
 			}
+			switch (functionType[counter]) {
+			case 1: equation[place]=Math.sin(equation[place]);
+			break;
+			case 2: equation[place]=Math.cos(equation[place]);
+			break;
+			case 3: equation[place]=Math.tan(equation[place]);
+			break;
+			case 4: equation[place]=Math.asin(equation[place]);
+			break;
+			case 5: equation[place]=Math.acos(equation[place]);
+			break;
+			case 6: equation[place]=Math.atan(equation[place]);
+			break;
+			default: throw new RuntimeException("Tried to calculate invalid function");
+			}
+			finalResult = equation[place];
+			functionLocation[counter] = 0;
+			functionType[counter] = 0;
+			funcCount--;
 		}
 	}
 }
@@ -379,30 +372,31 @@ static void clickFunction(String function) {
 	if (MainWindow.inputText.getText().isEmpty()==false||MainWindow.currentEquation.getText().endsWith(")")==true) {
 		clickOperator('*');
 	}
-	func[convertFunctionNameToNumber(function)][funcCount] = eqCount;
+	functionLocation[funcCount] = eqCount;
+	functionType[funcCount] = convertFunctionNameToNumber(function);
 	funcCount++;
 	MainWindow.currentEquation.setText(MainWindow.currentEquation.getText() + function);
 	clickOpenBracket();
 }
 static String convertFunctionNumberToName(int number) {
 	switch (number) {
-	case 0: return "sin";
-	case 1: return "cos";
-	case 2: return "tan";
-	case 3: return "asin";
-	case 4: return "acos";
-	case 5: return "atan";
+	case 1: return "sin";
+	case 2: return "cos";
+	case 3: return "tan";
+	case 4: return "asin";
+	case 5: return "acos";
+	case 6: return "atan";
 	default: return "INVALID";
 	}
 }
 static int convertFunctionNameToNumber(String name) {
 	switch (name) {
-	case "sin": return 0;
-	case "cos": return 1;
-	case "tan": return 2;
-	case "asin":return 3;
-	case "acos":return 4;
-	case "atan":return 5;
+	case "sin": return 1;
+	case "cos": return 2;
+	case "tan": return 3;
+	case "asin":return 4;
+	case "acos":return 5;
+	case "atan":return 6;
 	default: return -1;
 	}
 }
