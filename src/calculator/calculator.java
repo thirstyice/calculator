@@ -119,6 +119,10 @@ static void calculate() {
 		return;
 	}
 	
+	// Allow for equations with no brackets
+	if (totalBracketPairs==0) {
+		totalBracketPairs++;
+	}
 	
 	// Aaaaand, Begin!
 	while (totalBracketPairs>0) {
