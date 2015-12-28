@@ -84,8 +84,7 @@ static void clickBackspace() {
 		MainWindow.currentEquation.setText(
 				MainWindow.currentEquation.getText().substring(0, MainWindow.currentEquation.getText().length() - 1));
 	} else {
-		System.out.println("Oops");
-		throw new RuntimeException();
+		throw new RuntimeException("Failed to backspace");
 	}
 	if (Character.isDigit(MainWindow.currentEquation.getText().charAt(MainWindow.currentEquation.getText().length() - 1))) {
 		eqCount--;
@@ -99,10 +98,6 @@ static void clickBackspace() {
 						0, MainWindow.currentEquation.getText().length() - 
 						MainWindow.inputText.getText().length()));
 		equation[eqCount]=0;
-	} else {
-		System.out.println(MainWindow.currentEquation.getText().charAt(MainWindow.currentEquation.getText().length() - 1));
-		System.out.println(MainWindow.currentEquation.getText().substring(0, MainWindow.currentEquation.getText().length() - 1));
-		throw new RuntimeException();
 	}
 }
 
