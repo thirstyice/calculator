@@ -34,6 +34,8 @@ static int operCount = 1;
 static char operator[] = new char[100];
 static char angleType = 'r';
 
+static String operators = "√^/*+-";
+
 static void clearDisplay() {
 	if (MainWindow.inputText.getText().isEmpty()==true) {
 		MainWindow.currentEquation.setText("");
@@ -45,6 +47,62 @@ static void clearDisplay() {
 		netBracketCount = 0;
 	} else {
 		MainWindow.inputText.setText("");
+	}
+}
+static void clickBackspace() {
+	if (MainWindow.inputText.getText().isEmpty()==false) {
+		MainWindow.inputText.setText(MainWindow.inputText.getText().substring(
+				0, MainWindow.inputText.getText().length() - 1
+				));
+	} else if (MainWindow.currentEquation.getText().isEmpty()==true) {
+		return;
+	} else if (MainWindow.currentEquation.getText().endsWith(")")) {
+			MainWindow.currentEquation.setText(MainWindow.currentEquation.getText().substring(0, MainWindow.currentEquation.getText().length() - 1));
+			
+			int position = totalBracketPairs-1; 
+			while (bracket[position][1]!=0) {
+				position--;
+			}
+			position++;
+			bracket[position][1] = 0;
+			netBracketCount++;
+			updateBracketCount();
+	} else if (MainWindow.currentEquation.getText().endsWith("(")) {
+			MainWindow.currentEquation.setText(
+					MainWindow.currentEquation.getText().substring(
+							0, MainWindow.currentEquation.getText().length() - 1
+							)
+					);
+			
+			totalBracketPairs--;	
+			bracket[totalBracketPairs][0] = 0;
+			netBracketCount--;
+			updateBracketCount();
+	} else if (operators.contains(String.valueOf(MainWindow.currentEquation.getText().charAt(MainWindow.currentEquation.getText().length() - 1)))) {
+		operCount--;
+		operator[operCount]=' ';
+		MainWindow.currentEquation.setText(
+				MainWindow.currentEquation.getText().substring(0, MainWindow.currentEquation.getText().length() - 1));
+	} else {
+		System.out.println("Oops");
+		throw new RuntimeException();
+	}
+	if (Character.isDigit(MainWindow.currentEquation.getText().charAt(MainWindow.currentEquation.getText().length() - 1))) {
+		eqCount--;
+		if(equation[eqCount] == (long) equation[eqCount]) {
+			MainWindow.inputText.setText(String.valueOf((long)equation[eqCount]));
+		} else {
+	        MainWindow.inputText.setText(String.valueOf(equation[eqCount]));
+		}
+		MainWindow.currentEquation.setText(
+				MainWindow.currentEquation.getText().substring(
+						0, MainWindow.currentEquation.getText().length() - 
+						MainWindow.inputText.getText().length()));
+		equation[eqCount]=0;
+	} else {
+		System.out.println(MainWindow.currentEquation.getText().charAt(MainWindow.currentEquation.getText().length() - 1));
+		System.out.println(MainWindow.currentEquation.getText().substring(0, MainWindow.currentEquation.getText().length() - 1));
+		throw new RuntimeException();
 	}
 }
 

@@ -272,7 +272,7 @@ public class MainWindow extends JFrame {
 		clearButton.setBackground(new Color(153, 153, 153));
 		clearButton.setForeground(Color.BLACK);
 		clearButton.setFont(new Font("Helvetica", Font.PLAIN, 18));
-		clearButton.setBounds(300, 90, 61, 51);
+		clearButton.setBounds(180, 90, 61, 51);
 		contentPane.add(clearButton);
 		
 		/*
@@ -533,7 +533,7 @@ public class MainWindow extends JFrame {
 		opSignChange.setBackground(new Color(153, 153, 153));
 		opSignChange.setForeground(Color.BLACK);
 		opSignChange.setFont(new Font("Helvetica", Font.PLAIN, 18));
-		opSignChange.setBounds(180, 90, 61, 51);
+		opSignChange.setBounds(240, 90, 61, 51);
 		contentPane.add(opSignChange);
 		
 		JButton opSqrt = new JButton("x√y");
@@ -767,5 +767,20 @@ public class MainWindow extends JFrame {
 		btnRad.setBackground(new Color(51, 153, 204));
 		btnRad.setBounds(0, 165, 61, 26);
 		contentPane.add(btnRad);
+		
+		JButton btnBackspace = new JButton("<--");
+		btnBackspace.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				calculator.clickBackspace();
+			}
+		});
+		btnBackspace.setOpaque(true);
+		btnBackspace.setMargin(new Insets(0, 0, 0, 0));
+		btnBackspace.setForeground(Color.BLACK);
+		btnBackspace.setFont(new Font("Helvetica", Font.PLAIN, 18));
+		btnBackspace.setBorder(new LineBorder(new Color(0, 0, 0)));
+		btnBackspace.setBackground(new Color(204, 0, 0));
+		btnBackspace.setBounds(300, 90, 61, 51);
+		contentPane.add(btnBackspace);
 	}
 }
